@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<title>Markmap</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+#mindmap {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+.markmap-dark {
+  background: #27272a;
+  color: white;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/style.css">
+</head>
+<body>
+<svg id="mindmap"></svg>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script><script>(r => {
+              setTimeout(r);
+            })(function renderToolbar() {
+  const {
+    markmap,
+    mm
+  } = window;
+  const {
+    el
+  } = markmap.Toolbar.create(mm);
+  el.setAttribute('style', 'position:absolute;bottom:20px;right:20px');
+  document.body.append(el);
+})</script><script>((getMarkmap, getOptions, root2, jsonOptions) => {
+              const markmap = getMarkmap();
+              window.mm = markmap.Markmap.create(
+                "svg#mindmap",
+                (getOptions || markmap.deriveOptions)(jsonOptions),
+                root2
+              );
+              if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                document.documentElement.classList.add("markmap-dark");
+              }
+            })(() => window.markmap,null,{"content":"Arborescence du Site Ch&#xe2;teaux Lastours","children":[{"content":"Pages Principales","children":[{"content":"<code>/</code> : <strong>Page d&apos;accueil</strong>","children":[],"payload":{"tag":"li","lines":"6,7"}},{"content":"<code>/les-vins</code> : <strong>Catalogue des vins</strong>","children":[{"content":"<code>/les-vins/[slug]</code> : <strong>Page de d&#xe9;tail d&apos;un vin</strong>","children":[],"payload":{"tag":"li","lines":"8,9"}}],"payload":{"tag":"li","lines":"7,9"}},{"content":"<code>/domaine</code> : <strong>Pr&#xe9;sentation du domaine</strong>","children":[{"content":"<code>/domaine/histoire</code> : Histoire du ch&#xe2;teau","children":[],"payload":{"tag":"li","lines":"10,11"}},{"content":"<code>/domaine/terroir</code> : Le terroir et ses sp&#xe9;cificit&#xe9;s","children":[],"payload":{"tag":"li","lines":"11,12"}},{"content":"<code>/domaine/engagement</code> : Nos engagements durables","children":[],"payload":{"tag":"li","lines":"12,13"}},{"content":"<code>/domaine/team</code> : L&apos;&#xe9;quipe du domaine","children":[],"payload":{"tag":"li","lines":"13,14"}}],"payload":{"tag":"li","lines":"9,14"}},{"content":"<code>/savoir-faire</code> : <strong>Le savoir-faire viticole</strong>","children":[{"content":"<code>/savoir-faire/vigne</code> : Travail de la vigne","children":[],"payload":{"tag":"li","lines":"15,16"}},{"content":"<code>/savoir-faire/chais</code> : Vinification et &#xe9;levage","children":[],"payload":{"tag":"li","lines":"16,17"}}],"payload":{"tag":"li","lines":"14,17"}},{"content":"<code>/gastronomie</code> : <strong>Accords mets &amp; vins</strong>","children":[],"payload":{"tag":"li","lines":"17,18"}},{"content":"<code>/evenements</code> : <strong>&#xc9;v&#xe9;nements au domaine</strong>","children":[{"content":"<code>/evenements/organiser</code> : Organiser un &#xe9;v&#xe9;nement priv&#xe9;","children":[],"payload":{"tag":"li","lines":"19,20"}}],"payload":{"tag":"li","lines":"18,20"}},{"content":"<code>/reservation</code> : <strong>R&#xe9;servation de visites et d&#xe9;gustations</strong>","children":[],"payload":{"tag":"li","lines":"20,21"}},{"content":"<code>/club</code> : <strong>Club Ch&#xe2;teaux Lastours</strong>","children":[{"content":"<code>/club/inscription</code> : Formulaire d&apos;inscription au club","children":[],"payload":{"tag":"li","lines":"22,24"}}],"payload":{"tag":"li","lines":"21,24"}}],"payload":{"tag":"h2","lines":"4,5"}},{"content":"Pages Utilisateur","children":[{"content":"<code>/compte</code> : <strong>Mon Compte</strong> (gestion du profil, historique des commandes)","children":[],"payload":{"tag":"li","lines":"26,27"}},{"content":"<code>/panier</code> : <strong>Panier d&apos;achat</strong>","children":[],"payload":{"tag":"li","lines":"27,29"}}],"payload":{"tag":"h2","lines":"24,25"}},{"content":"Pages Institutionnelles &amp; L&#xe9;gales","children":[{"content":"<code>/mecenat</code> : <strong>M&#xe9;c&#xe9;nat et partenariats</strong>","children":[],"payload":{"tag":"li","lines":"31,32"}},{"content":"<code>/faq</code> : <strong>Foire aux questions</strong>","children":[],"payload":{"tag":"li","lines":"32,33"}},{"content":"<code>/sitemap</code> : <strong>Plan du site</strong>","children":[],"payload":{"tag":"li","lines":"33,34"}},{"content":"<code>/mentions-legales</code> : <strong>Mentions L&#xe9;gales</strong>","children":[],"payload":{"tag":"li","lines":"34,35"}},{"content":"<code>/cgv</code> : <strong>Conditions G&#xe9;n&#xe9;rales de Vente</strong>","children":[],"payload":{"tag":"li","lines":"35,36"}},{"content":"<code>/cgu</code> : <strong>Conditions G&#xe9;n&#xe9;rales d&apos;Utilisation</strong>","children":[],"payload":{"tag":"li","lines":"36,37"}},{"content":"<code>/cookies</code> : <strong>Politique de gestion des cookies</strong>","children":[],"payload":{"tag":"li","lines":"37,38"}}],"payload":{"tag":"h2","lines":"29,30"}}],"payload":{"tag":"h1","lines":"0,1"}},{})</script>
+</body>
+</html>

@@ -38,6 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${libertinusSerif.variable} ${dmSans.variable}`}>
+      {/* The default theme is now dark, so we don't need to add "dark" className to the body */}
       <body className="font-sans antialiased">
         <AuthProvider>
           <CartProvider>

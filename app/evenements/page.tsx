@@ -5,88 +5,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { ArrowRight, Calendar, Clock, Users, Wine, Music, Utensils } from "lucide-react"
+import { getAllEvents } from "@/lib/events-data"
 
 export default function EvenementsPage() {
-  const events = [
-    {
-      id: "vendanges-2024",
-      title: "Fête des Vendanges 2024",
-      date: "2024-09-15",
-      time: "10:00 - 18:00",
-      type: "Festival",
-      price: "Gratuit",
-      description:
-        "Participez à notre traditionnelle fête des vendanges ! Au programme : participation aux vendanges, dégustation, repas convivial et animations musicales.",
-      image: "/harvest-festival-celebration-vineyard.png",
-      featured: true,
-      spots: "Illimité",
-    },
-    {
-      id: "degustation-prestige",
-      title: "Soirée Dégustation Prestige",
-      date: "2024-10-12",
-      time: "19:00 - 22:00",
-      type: "Dégustation",
-      price: "85€",
-      description:
-        "Une soirée exclusive pour découvrir nos cuvées les plus prestigieuses accompagnées d'un menu gastronomique conçu par le chef étoilé Laurent Dubois.",
-      image: "/prestige-wine-tasting-evening-elegant.png",
-      featured: true,
-      spots: "24 places",
-    },
-    {
-      id: "masterclass-assemblage",
-      title: "Masterclass Assemblage",
-      date: "2024-11-08",
-      time: "14:00 - 17:00",
-      type: "Formation",
-      price: "120€",
-      description:
-        "Apprenez l'art de l'assemblage avec notre œnologue Marie Lastours. Créez votre propre cuvée et repartez avec votre bouteille personnalisée.",
-      image: "/wine-blending-masterclass-workshop.png",
-      featured: false,
-      spots: "12 places",
-    },
-    {
-      id: "noel-au-domaine",
-      title: "Noël au Domaine",
-      date: "2024-12-14",
-      time: "16:00 - 20:00",
-      type: "Événement familial",
-      price: "45€ adulte, 15€ enfant",
-      description:
-        "Célébrez Noël dans la magie de notre domaine. Visite féerique, dégustation de vins chauds épicés, ateliers pour enfants et marché de Noël.",
-      image: "/christmas-celebration-wine-estate-family.png",
-      featured: false,
-      spots: "50 places",
-    },
-    {
-      id: "saint-valentin",
-      title: "Dîner de la Saint-Valentin",
-      date: "2025-02-14",
-      time: "19:30 - 23:00",
-      type: "Dîner romantique",
-      price: "150€ par couple",
-      description:
-        "Un dîner romantique aux chandelles dans nos chais historiques, avec menu 5 services et accords mets-vins exceptionnels.",
-      image: "/romantic-valentine-dinner-wine-cellar.png",
-      featured: true,
-      spots: "20 couples",
-    },
-    {
-      id: "printemps-des-vins",
-      title: "Printemps des Vins Nouveaux",
-      date: "2025-03-21",
-      time: "11:00 - 17:00",
-      type: "Dégustation",
-      price: "35€",
-      description:
-        "Découvrez en avant-première nos nouveaux millésimes dans l'ambiance printanière de notre domaine fleuri.",
-      image: "/spring-wine-tasting-new-vintages.png",
-      featured: false,
-      spots: "40 places",
-    },
-  ]
+  const events = getAllEvents()
 
   const getEventIcon = (type: string) => {
     switch (type) {
@@ -157,7 +79,11 @@ export default function EvenementsPage() {
                           )}
                         </div>
 
-                        <h3 className="text-3xl font-display mb-4">{event.title}</h3>
+                        <h3 className="text-3xl font-display mb-4">
+                          <Link href={`/evenements/${event.id}`} className="hover:text-accent">
+                            {event.title}
+                          </Link>
+                        </h3>
 
                         <div className="flex flex-wrap gap-4 mb-6 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
@@ -227,7 +153,11 @@ export default function EvenementsPage() {
                       {event.featured && <Badge className="text-xs bg-accent text-accent-foreground">Featured</Badge>}
                     </div>
 
-                    <h3 className="text-xl font-heading mb-3">{event.title}</h3>
+                    <h3 className="text-xl font-heading mb-3">
+                      <Link href={`/evenements/${event.id}`} className="hover:text-accent">
+                        {event.title}
+                      </Link>
+                    </h3>
 
                     <div className="space-y-2 mb-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-2">

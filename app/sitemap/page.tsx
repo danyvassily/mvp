@@ -21,6 +21,11 @@ export default function SitemapPage() {
       ],
     },
     {
+      title: "Actualités",
+      url: "/actualites",
+      children: [],
+    },
+    {
       title: "Savoir-Faire",
       url: "/savoir-faire",
       children: [
@@ -29,6 +34,11 @@ export default function SitemapPage() {
         { title: "Conservation", url: "/savoir-faire/conservation" },
         { title: "Service & Dégustation", url: "/savoir-faire/service-degustation" },
       ],
+    },
+    {
+      title: "Presse",
+      url: "/presse",
+      children: [],
     },
     {
       title: "Nos Vins",
@@ -40,6 +50,11 @@ export default function SitemapPage() {
         { title: "Collection Poussin", url: "/les-vins?collection=poussin" },
         { title: "Collection Opus", url: "/les-vins?collection=opus" },
       ],
+    },
+    {
+      title: "Où nous trouver",
+      url: "/ou-nous-trouver",
+      children: [],
     },
     {
       title: "Gastronomie",

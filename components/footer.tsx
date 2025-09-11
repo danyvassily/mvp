@@ -27,7 +27,7 @@ export function Footer() {
 
           {/* Navigation Links */}
           <div className="lg:col-span-6">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-center md:text-left">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
               <div>
                 <h4 className="font-heading text-lg mb-4 text-white/90">Le Domaine</h4>
                 <nav className="flex flex-col space-y-3">
@@ -50,6 +50,14 @@ export function Footer() {
                   <FooterLink href="/reservation">Réserver une visite</FooterLink>
                   <FooterLink href="/evenements">Événements</FooterLink>
                   <FooterLink href="/club">Club Lastours</FooterLink>
+                </nav>
+              </div>
+              <div>
+                <h4 className="font-heading text-lg mb-4 text-white/90">Infos</h4>
+                <nav className="flex flex-col space-y-3">
+                  <FooterLink href="/actualites">Actualités</FooterLink>
+                  <FooterLink href="/presse">Presse</FooterLink>
+                  <FooterLink href="/ou-nous-trouver">Où nous trouver</FooterLink>
                 </nav>
               </div>
             </div>

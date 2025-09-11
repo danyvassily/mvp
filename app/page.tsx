@@ -1,345 +1,266 @@
 "use client"
 
-
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
-import { ArrowRight, Award, Grape, MapPin } from "lucide-react"
-import { useEffect, useState } from "react"
+import Image from "next/image"
+import { ArrowRight, MoveRight } from "lucide-react"
+import { useRef } from "react"
+import { gsap } from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { getFeaturedWines } from "@/lib/wines-data"
+import { getLatestArticles } from "@/lib/news-data"
+import { getUpcomingEvents } from "@/lib/events-data"
 import { HomeWineCard } from "@/components/home-wine-card"
 
+gsap.registerPlugin(ScrollTrigger)
+
 export default function HomePage() {
-  const [scrollY, setScrollY] = useState(0)
-  const [isVisible, setIsVisible] = useState({
-    collections: false,
-    philosophy: false,
-    domain: false,
-    awards: false,
-  })
+  const container = useRef(null)
+  const heroImage = useRef(null)
+  const featuredWines = getFeaturedWines()
+  const latestArticles = getLatestArticles(3)
+  const upcomingEvents = getUpcomingEvents()
+    .sort((a, b) => (a.date < b.date ? -1 : 1))
+    .slice(0, 3)
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  useGSAP(
+    () => {
+      // Hero Section Animations
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+      tl.from(".hero-title", {
+        y: 100,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.2,
+      })
+        .from(
+          ".hero-button",
+          { y: 50, opacity: 0, duration: 1 },
+          "-=0.8"
+        )
+        .fromTo(
+          heroImage.current,
+          { scale: 1.2, y: "-10%" },
+          {
+            scale: 1,
+            y: "0%",
+            duration: 2,
+            ease: "power2.inOut",
+          },
+          "<"
+        )
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const target = entry.target.getAttribute("data-section")
-            if (target) {
-              setIsVisible((prev) => ({ ...prev, [target]: true }))
-            }
-          }
+      // Parallax effect for Hero Image
+      gsap.to(heroImage.current, {
+        y: "20%",
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      })
+
+      // Section Animations on Scroll
+      const sections = gsap.utils.toArray("section:not(:first-child)")
+      sections.forEach((section) => {
+        gsap.from(section as gsap.DOMTarget, {
+          opacity: 0,
+          y: 100,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section as gsap.DOMTarget,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
         })
-      },
-      { threshold: 0.1 },
-    )
-
-    const sections = document.querySelectorAll("[data-section]")
-    sections.forEach((section) => observer.observe(section))
-
-    return () => observer.disconnect()
-  }, [])
+      })
+    },
+    { scope: container }
+  )
 
   return (
-    <div className="min-h-screen">
-
+    <div ref={container} className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 ease-out"
-          style={{
-            backgroundImage: `url('/chateau-lastours-hero.jpg')`,
-            transform: `translateY(${scrollY * 0.5}px)`, // Parallax effect
-          }}
-        />
-        <div className="absolute inset-0 bg-black/40 opacity-75" />
-        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          <h1 className="text-5xl md:text-7xl font-display mb-6 text-balance animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
+          ref={heroImage}
+          className="absolute inset-0 will-change-transform"
+        >
+          <Image
+            src="/chateau-lastours-hero.jpg"
+            alt="Vignoble du Château Lastours au coucher du soleil"
+            fill
+            priority
+            className="object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+          <h1 className="text-5xl md:text-7xl font-display mb-6 text-balance hero-title">
             Châteaux Lastours
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-pretty opacity-90 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500">
+          <p className="text-xl md:text-2xl mb-8 text-pretty opacity-90 hero-title">
             L'excellence viticole du sud de la France depuis 1847
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-700">
-            <Button size="lg" asChild className="group hover:scale-105 transition-all duration-300">
-              <Link href="/les-vins">
-                Découvrir nos Vins
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-            </Button>
+          <div className="hero-button">
             <Button
               size="lg"
               variant="outline"
-              className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:scale-105 transition-all duration-300"
               asChild
+              className="group bg-transparent text-white border-white hover:bg-white hover:text-black transition-all duration-300"
             >
-              <Link href="/reservation">Réserver une Visite</Link>
+              <Link href="/les-vins">
+                Voir la collection de vins
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Wine Collections */}
-      <section className="py-24 bg-zinc-200" data-section="collections">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div
-            className={`text-center mb-16 transition-all duration-1000 ${isVisible.collections ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
-            <h2 className="text-4xl md:text-5xl font-display mb-6">Nos Collections</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-              Quatre gammes d'exception qui révèlent la richesse et la diversité de notre terroir unique
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                image: "/gamme-poussin.jpg",
-                title: "Gamme Poussin",
-                link: "/les-vins?collection=poussin",
-                delay: "delay-100",
-              },
-              {
-                image: "/gamme-confidentielle.jpg",
-                title: "Gamme Confidentielle",
-                link: "/les-vins?collection=confidentielle",
-                delay: "delay-200",
-              },
-              {
-                image: "/gamme-methode.jpg",
-                title: "Gamme Méthode",
-                link: "/les-vins?collection=methode",
-                delay: "delay-300",
-              },
-              {
-                image: "/gamme-opus.jpg",
-                title: "Gamme Opus",
-                link: "/les-vins?collection=opus",
-                delay: "delay-400",
-              },
-            ].map((collection, index) => (
-              <Card
-                key={index}
-                className={`group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 ${isVisible.collections ? `opacity-100 translate-y-0 ${collection.delay}` : "opacity-0 translate-y-8"}`}
-              >
-                <CardContent className="p-6">
-                  <div className="aspect-[3/4] mb-4 bg-white rounded-lg overflow-hidden flex items-center justify-center">
-                    <img
-                      src={collection.image || "/placeholder.svg"}
-                      alt={collection.title}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                  <h3 className="text-xl font-heading text-center group-hover:text-wine-gold transition-colors duration-300 mb-4">
-                    {collection.title}
-                  </h3>
-                  <Button
-                    variant="outline"
-                    asChild
-                    className="w-full group/btn hover:bg-wine-gold hover:text-wine-black hover:border-wine-gold transition-all duration-300 bg-transparent"
-                  >
-                    <Link href={collection.link}>
-                      Découvrir
-                      <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+      {/* Story Section */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4 lg:px-8 max-w-5xl text-center">
+          <h2 className="text-4xl md:text-5xl font-display mb-6 text-primary">
+            Une Histoire de Passion
+          </h2>
+          <p className="text-lg md:text-xl text-foreground/80 mb-8 max-w-3xl mx-auto">
+            Depuis plus d'un siècle et demi, le Château Lastours est le gardien
+            d'un savoir-faire ancestral. Niché au cœur d'un terroir
+            exceptionnel, notre domaine façonne des vins qui sont la pure
+            expression de leur origine, alliant tradition et innovation.
+          </p>
+          <Button asChild variant="link" className="text-lg text-primary group">
+            <Link href="/domaine/histoire">
+              Découvrir notre héritage
+              <MoveRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Button>
         </div>
       </section>
 
       {/* Featured Wines Section */}
-      <section className="py-24 bg-white" data-section="featured-wines">
+      <section className="py-24">
         <div className="container mx-auto px-4 lg:px-8">
-          <div
-            className={`text-center mb-16 transition-all duration-1000 ${isVisible.collections ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
-            <h2 className="text-4xl md:text-5xl font-display mb-6">Nos Vins d'Exception</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-              Une sélection de nos cuvées les plus emblématiques, acclamées par la critique.
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-display mb-4 text-primary">
+              Nos Vins d'Exception
+            </h2>
+            <p className="text-lg md:text-xl text-foreground/80">
+              Une sélection de nos cuvées les plus emblématiques.
             </p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {getFeaturedWines().map((wine, index) => (
-              <HomeWineCard
-                key={wine.id}
-                wine={wine}
-                className={`transition-all duration-1000 ${isVisible.collections ? `opacity-100 translate-y-0 delay-${index * 100}` : "opacity-0 translate-y-8"}`}
-              />
+            {featuredWines.map((wine) => (
+              <HomeWineCard key={wine.id} wine={wine} />
             ))}
           </div>
-          <div className="text-center mt-16">
-            <Button size="lg" asChild className="group hover:scale-105 transition-all duration-300">
+          <div className="text-center mt-12">
+            <Button size="lg" asChild className="group">
               <Link href="/les-vins">
-                Voir tous nos vins
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                Explorer toute la collection
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+      
+      {/* Experience Section */}
+      <section className="py-24 bg-card">
+         <div className="container mx-auto px-4 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+               <div className="text-center lg:text-left">
+                  <h2 className="text-4xl md:text-5xl font-display mb-6 text-primary">
+                     Vivez l'Expérience Lastours
+                  </h2>
+                  <p className="text-lg md:text-xl text-foreground/80 mb-8">
+                     Plongez au cœur de notre domaine. Participez à nos dégustations exclusives, visitez nos chais centenaires et laissez-vous séduire par la magie d'un lieu chargé d'histoire.
+                  </p>
+                  <Button size="lg" asChild className="group">
+                     <Link href="/reservation">
+                        Réserver une visite
+                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                     </Link>
+                  </Button>
+               </div>
+               <div className="relative h-80 lg:h-96 rounded-lg overflow-hidden shadow-2xl">
+                  <Image
+                     src="/french-chateau-vineyard-landscape-with-rolling-hil.png"
+                     alt="Paysage du vignoble de Château Lastours"
+                     fill
+                     className="object-cover"
+                  />
+               </div>
+            </div>
+         </div>
+      </section>
+
+      {/* Événements à venir */}
+      <section className="py-24">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-display mb-4 text-primary">Événements à venir</h2>
+            <p className="text-lg md:text-xl text-foreground/80">Partagez des moments d'exception au domaine</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {upcomingEvents.map((event) => (
+              <Link key={event.slug} href={`/evenements/${event.slug}`} className="group rounded-lg border bg-card overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="relative aspect-[4/3]">
+                  <Image src={event.image || "/wine-tasting-event.png"} alt={event.title} fill className="object-cover" />
+                </div>
+                <div className="p-6 space-y-2">
+                  <div className="text-sm text-muted-foreground">{new Date(event.date).toLocaleDateString("fr-FR")}</div>
+                  <h3 className="text-xl font-display group-hover:text-accent">{event.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{event.description}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Button asChild size="lg" className="group">
+              <Link href="/evenements">
+                Voir tous les événements
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Philosophy Section */}
-      <section className="py-24 bg-slate-50" data-section="philosophy">
+      {/* Dernières actualités */}
+      <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-4 lg:px-8">
-          <div
-            className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${isVisible.philosophy ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
-            <h2 className="text-4xl md:text-5xl font-display mb-8">Notre Philosophie</h2>
-            <p className="text-xl leading-relaxed text-muted-foreground text-pretty">
-              Depuis plus de 175 ans, nous cultivons l'art de la vinification avec passion et respect. Chaque bouteille
-              raconte l'histoire de notre terroir exceptionnel, où tradition et innovation se rencontrent pour créer des
-              vins d'une élégance rare. Notre engagement envers l'excellence guide chacun de nos gestes, de la vigne à
-              votre table.
-            </p>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-display mb-4 text-primary">Dernières actualités</h2>
+            <p className="text-lg md:text-xl text-foreground/80">Découvrez nos nouvelles et nos engagements</p>
           </div>
-        </div>
-      </section>
-
-      {/* Immersive Wine Glass */}
-      <section className="relative h-96 md:h-[500px] overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 ease-out"
-          style={{
-            backgroundImage: `url('/elegant-wine-glass-with-red-wine-in-vineyard-setti.png')`,
-            transform: `translateY(${scrollY * 0.3}px)`, // Subtle parallax
-          }}
-        />
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="text-center text-white max-w-2xl mx-auto px-4 hover:scale-105 transition-transform duration-500">
-            <blockquote className="text-2xl md:text-3xl font-display italic text-balance">
-              "Le vin est la poésie de la terre, et nous en sommes les humbles interprètes."
-            </blockquote>
-            <cite className="block mt-4 text-lg opacity-80">— Henri Lastours, Fondateur</cite>
-          </div>
-        </div>
-      </section>
-
-      {/* Domain Presentation */}
-      <section className="py-24" data-section="domain">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div
-              className={`transition-all duration-1000 ${isVisible.domain ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"}`}
-            >
-              <h2 className="text-4xl md:text-5xl font-display mb-8">Le Domaine</h2>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                Niché au cœur des collines du sud de la France, Châteaux Lastours s'étend sur 120 hectares de vignes
-                soigneusement cultivées. Notre terroir unique, façonné par des siècles d'histoire, bénéficie d'un
-                microclimat exceptionnel et de sols argilo-calcaires qui confèrent à nos vins leur caractère distinctif.
-              </p>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Chaque parcelle est travaillée avec un soin méticuleux, dans le respect des traditions ancestrales et
-                des pratiques durables. C'est cette harmonie entre l'homme et la nature qui donne naissance à des vins
-                d'exception.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild className="group hover:scale-105 transition-all duration-300">
-                  <Link href="/domaine/histoire">
-                    Notre Histoire
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  asChild
-                  className="hover:scale-105 transition-all duration-300 bg-transparent"
-                >
-                  <Link href="/domaine/terroir">Découvrir le Terroir</Link>
-                </Button>
-              </div>
-            </div>
-            <div
-              className={`aspect-[4/3] bg-muted rounded-lg overflow-hidden transition-all duration-1000 ${isVisible.domain ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"}`}
-            >
-              <img
-                src="/french-chateau-vineyard-landscape-with-rolling-hil.png"
-                alt="Domaine Châteaux Lastours"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Awards & Recognition */}
-      <section className="py-24 bg-muted/30" data-section="awards">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div
-            className={`text-center mb-16 transition-all duration-1000 ${isVisible.awards ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
-            <h2 className="text-4xl md:text-5xl font-display mb-6">Reconnaissance</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-              L'excellence de nos vins est reconnue par les plus grands critiques et concours internationaux
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Award,
-                title: "Médaille d'Or",
-                description: "Concours Général Agricole 2024",
-                delay: "delay-100",
-              },
-              {
-                icon: Grape,
-                title: "95/100",
-                description: "Wine Spectator Magazine",
-                delay: "delay-300",
-              },
-              {
-                icon: MapPin,
-                title: "AOC Certifié",
-                description: "Appellation d'Origine Contrôlée",
-                delay: "delay-500",
-              },
-            ].map((award, index) => {
-              const IconComponent = award.icon
-              return (
-                <div
-                  key={index}
-                  className={`text-center group hover:-translate-y-2 transition-all duration-500 ${isVisible.awards ? `opacity-100 translate-y-0 ${award.delay}` : "opacity-0 translate-y-8"}`}
-                >
-                  <div className="w-16 h-16 bg-wine-gold rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
-                    <IconComponent className="w-8 h-8 text-wine-black" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {latestArticles.map((post) => (
+              <Link key={post.slug} href={`/actualites/${post.slug}`} className="group rounded-lg border bg-card overflow-hidden hover:shadow-lg transition-shadow">
+                {post.image && (
+                  <div className="relative aspect-[4/3]">
+                    <Image src={post.image} alt={post.title} fill className="object-cover" />
                   </div>
-                  <h3 className="text-xl font-heading mb-2 group-hover:text-wine-gold transition-colors duration-300">
-                    {award.title}
-                  </h3>
-                  <p className="text-muted-foreground">{award.description}</p>
+                )}
+                <div className="p-6 space-y-2">
+                  <div className="text-sm text-muted-foreground">{new Date(post.date).toLocaleDateString("fr-FR")}</div>
+                  <h3 className="text-xl font-display group-hover:text-accent">{post.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
                 </div>
-              )
-            })}
+              </Link>
+            ))}
           </div>
-        </div>
-      </section>
-
-      {/* Nature Immersive */}
-      <section className="relative h-screen overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 ease-out"
-          style={{
-            backgroundImage: `url('/beautiful-vineyard-garden-with-lavender-and-olive-.png')`,
-            transform: `translateY(${scrollY * 0.2}px)`, // Gentle parallax
-          }}
-        />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="text-center text-white max-w-3xl mx-auto px-4 hover:scale-105 transition-transform duration-500">
-            <h2 className="text-3xl md:text-4xl font-display mb-6 text-balance">L'Art de Vivre à la Française</h2>
-            <p className="text-lg md:text-xl text-pretty opacity-90">
-              Découvrez l'harmonie parfaite entre nature, tradition et excellence
-            </p>
+          <div className="text-center mt-12">
+            <Button asChild size="lg" variant="outline" className="group bg-transparent">
+              <Link href="/actualites">
+                Voir toutes les actualités
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

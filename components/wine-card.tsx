@@ -31,7 +31,7 @@ export function WineCard({ wine }: WineCardProps) {
     methode: "Méthode",
     fruitees: "Fruitées",
     poussin: "Poussin",
-    domeni: "Domeni",
+    domeni: "Doméni",
     confidentielle: "Confidentielle",
     opus: "Opus",
   }

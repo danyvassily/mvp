@@ -44,7 +44,7 @@ export default function SitemapPage() {
       title: "Nos Vins",
       url: "/les-vins",
       children: [
-        { title: "Collection Domeni", url: "/les-vins?collection=domeni" },
+        { title: "Collection Doméni", url: "/les-vins?collection=domeni" },
         { title: "Collection Méthode", url: "/les-vins?collection=methode" },
         { title: "Collection Confidentielle", url: "/les-vins?collection=confidentielle" },
         { title: "Collection Poussin", url: "/les-vins?collection=poussin" },

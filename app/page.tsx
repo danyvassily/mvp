@@ -8,17 +8,14 @@ import { useRef } from "react"
 import { gsap } from "gsap"
 import { useGSAP } from "@gsap/react"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { getFeaturedWines } from "@/lib/wines-data"
 import { getLatestArticles } from "@/lib/news-data"
 import { getUpcomingEvents } from "@/lib/events-data"
-import { HomeWineCard } from "@/components/home-wine-card"
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function HomePage() {
   const container = useRef(null)
   const heroImage = useRef(null)
-  const featuredWines = getFeaturedWines()
   const latestArticles = getLatestArticles(3)
   const upcomingEvents = getUpcomingEvents()
     .sort((a, b) => (a.date < b.date ? -1 : 1))
@@ -142,33 +139,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Wines Section */}
-      <section className="py-24">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-display mb-4 text-primary">
-              Nos Vins d'Exception
-            </h2>
-            <p className="text-lg md:text-xl text-foreground/80">
-              Une sélection de nos cuvées les plus emblématiques.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredWines.map((wine) => (
-              <HomeWineCard key={wine.id} wine={wine} />
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Button size="lg" asChild className="group">
-              <Link href="/les-vins">
-                Explorer toute la collection
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-      
       {/* Experience Section */}
       <section className="py-24 bg-card">
          <div className="container mx-auto px-4 lg:px-8">

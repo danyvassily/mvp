@@ -26,7 +26,7 @@ export function ScrollSmootherWrapper({
     // Register GSAP plugins
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother)
 
-    // Create ScrollSmoother instance
+    // Create ScrollSmoother instance with enhanced settings
     smootherRef.current = ScrollSmoother.create({
       wrapper: wrapperRef.current!,
       content: contentRef.current!,
@@ -34,8 +34,19 @@ export function ScrollSmootherWrapper({
       normalizeScroll: true,
       ignoreMobileResize: true,
       effects: effects,
+      smoothTouch: 0.1, // Touch scroll smoothing
       onUpdate: (self) => {
-        // Optional: Add custom scroll update logic
+        // Custom parallax effects for data-speed elements
+        const elements = document.querySelectorAll('[data-speed]');
+        elements.forEach((el: any) => {
+          const speed = parseFloat(el.dataset.speed) || 1;
+          const y = self.scrollTop() * (1 - speed);
+          gsap.set(el, { y });
+        });
+      },
+      onRefresh: () => {
+        // Refresh custom animations when ScrollSmoother refreshes
+        ScrollTrigger.getAll().forEach(trigger => trigger.refresh());
       }
     })
 

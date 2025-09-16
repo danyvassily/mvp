@@ -212,10 +212,7 @@ export default function ReservationPage() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div>
                       <Label className="text-base font-medium mb-4 block">Sélectionnez une date disponible</Label>
-                      <CalendarWidget
-                        onDateSelect={(date) => updateFormData("date", date)}
-                        selectedDate={formData.date}
-                      />
+                      <CalendarWidget />
                     </div>
                     <div className="space-y-6">
                       <div className="space-y-2">

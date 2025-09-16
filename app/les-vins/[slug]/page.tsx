@@ -5,9 +5,9 @@ import { getWineBySlug, wines } from "@/lib/wines-data"
 import { WinePageClient } from "./wine-page-client"
 
 interface WinePageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateStaticParams() {

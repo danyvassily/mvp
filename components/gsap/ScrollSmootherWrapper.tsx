@@ -44,10 +44,10 @@ export function ScrollSmootherWrapper({
           gsap.set(el, { y });
         });
       },
-      onRefresh: () => {
-        // Refresh custom animations when ScrollSmoother refreshes
-        ScrollTrigger.getAll().forEach(trigger => trigger.refresh());
-      }
+      // onRefresh: () => {
+      //   // Refresh custom animations when ScrollSmoother refreshes
+      //   ScrollTrigger.getAll().forEach(trigger => trigger.refresh());
+      // }
     })
 
     // Refresh ScrollTrigger on load

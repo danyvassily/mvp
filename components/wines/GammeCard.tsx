@@ -19,9 +19,9 @@ export function GammeCard({ gamme, isOpen, onToggle }: GammeCardProps) {
         onClick={onToggle}
         className="w-full text-left bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden focus:outline-none focus:ring-4 focus:ring-opacity-50"
         style={{ 
-          focusRingColor: accent + "30"
+          // focusRingColor: accent + "30"
         }}
-        aria-expanded={isOpen.toString()}
+        aria-expanded={isOpen}
         aria-controls={`gamme-${gamme.id}-content`}
         aria-label={`${isOpen ? 'Masquer' : 'Voir'} les cuvées de la gamme ${title}`}
       >

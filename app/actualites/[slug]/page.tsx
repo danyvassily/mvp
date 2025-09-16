@@ -5,11 +5,12 @@ import { getArticleBySlug, getLatestArticles } from "@/lib/news-data"
 import Link from "next/link"
 
 interface ArticlePageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
-export default function ArticlePage({ params }: ArticlePageProps) {
-  const article = getArticleBySlug(params.slug)
+export default async function ArticlePage({ params }: ArticlePageProps) {
+  const { slug } = await params
+  const article = getArticleBySlug(slug)
   if (!article) return notFound()
 
   const latest = getLatestArticles(3).filter((a) => a.slug !== article.slug)

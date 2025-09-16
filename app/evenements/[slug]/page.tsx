@@ -8,11 +8,12 @@ import { Calendar, Clock, Users, MapPin, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface EventPageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
-export default function EventPage({ params }: EventPageProps) {
-  const event = getEventBySlug(params.slug)
+export default async function EventPage({ params }: EventPageProps) {
+  const { slug } = await params
+  const event = getEventBySlug(slug)
   if (!event) return notFound()
 
   return (

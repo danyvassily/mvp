@@ -41,7 +41,7 @@ export function ScrollParallax({ children, speed = 0.8, lag = 0.2, className }: 
 
     return () => {
       parallaxTween.kill();
-      ScrollTrigger.getById(parallaxTween.scrollTrigger?.id)?.kill();
+      // ScrollTrigger.getById(parallaxTween.scrollTrigger?.id)?.kill();
     };
   }, [speed, lag]);
 
@@ -113,7 +113,7 @@ export function RevealAnimation({
 
     return () => {
       revealTween.kill();
-      ScrollTrigger.getById(revealTween.scrollTrigger?.id)?.kill();
+      // ScrollTrigger.getById(revealTween.scrollTrigger?.id)?.kill();
     };
   }, [direction, distance, duration, delay]);
 
@@ -181,7 +181,7 @@ export function TextImageTransition({ children, stagger = 0.2, className }: Text
 
     return () => {
       timeline.kill();
-      ScrollTrigger.getById(timeline.scrollTrigger?.id)?.kill();
+      // ScrollTrigger.getById(timeline.scrollTrigger?.id)?.kill();
     };
   }, [stagger]);
 

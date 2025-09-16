@@ -43,7 +43,7 @@ export function WineCard({ wine }: WineCardProps) {
       name: wine.name,
       price: wine.price,
       image: wine.image || "/wine-bottle-default.png",
-      vintage: wine.vintage,
+      vintage: wine.vintage?.toString() || "",
       collection: wine.collection,
     })
   }

@@ -57,10 +57,10 @@ export function CuveeCard({ cuvee, accent }: CuveeCardProps) {
           <Link
             href={route}
             className="group/btn flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2"
-            style={{ 
-              backgroundColor: accent,
-              focusRingColor: accent + "50"
-            }}
+             style={{ 
+               backgroundColor: accent,
+               // focusRingColor: accent + "50"
+             }}
             aria-label={`Découvrir la cuvée ${title}`}
           >
             <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowLeft, Award, Wine, Grape, Clock, Thermometer } from "lucide-react"
+import { ArrowLeft, Award, Wine as WineIcon, Grape, Clock, Thermometer } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
@@ -184,7 +184,7 @@ export function WinePageLuxe({ wine, imagePath, pdfPath }: WinePageLuxeProps) {
           {/* Navigation des onglets */}
           <div className="flex flex-wrap justify-center gap-2 mb-12">
             {[
-              { key: "tasting", label: "Dégustation", icon: Wine },
+              { key: "tasting", label: "Dégustation", icon: WineIcon },
               { key: "technical", label: "Informations techniques", icon: Grape },
               { key: "pairing", label: "Accords mets-vins", icon: Clock },
               { key: "composition", label: "Composition", icon: Thermometer },

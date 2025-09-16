@@ -1,28 +1,153 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@layer base {
+  :root {
+    --text-50: #fce9fc;
+    --text-100: #f8d3f8;
+    --text-200: #f1a7f1;
+    --text-300: #ea7bea;
+    --text-400: #e34fe3;
+    --text-500: #dd22dd;
+    --text-600: #b01cb0;
+    --text-700: #841584;
+    --text-800: #580e58;
+    --text-900: #2c072c;
+    --text-950: #160316;
+
+    --background-50: #f5f0f5;
+    --background-100: #ebe0eb;
+    --background-200: #d6c2d6;
+    --background-300: #c2a3c2;
+    --background-400: #ad85ad;
+    --background-500: #996699;
+    --background-600: #7a527a;
+    --background-700: #5c3d5c;
+    --background-800: #3d293d;
+    --background-900: #1f141f;
+    --background-950: #0f0a0f;
+
+    --primary-50: #f6eef6;
+    --primary-100: #ecdeed;
+    --primary-200: #dabcdc;
+    --primary-300: #c79bca;
+    --primary-400: #b479b9;
+    --primary-500: #a258a7;
+    --primary-600: #814686;
+    --primary-700: #613564;
+    --primary-800: #412343;
+    --primary-900: #201221;
+    --primary-950: #100911;
+
+    --secondary-50: #f6f5ee;
+    --secondary-100: #edeade;
+    --secondary-200: #dcd5bc;
+    --secondary-300: #cac19b;
+    --secondary-400: #b9ac79;
+    --secondary-500: #a79758;
+    --secondary-600: #867946;
+    --secondary-700: #645b35;
+    --secondary-800: #433c23;
+    --secondary-900: #211e12;
+    --secondary-950: #110f09;
+
+    --accent-50: #fcefe9;
+    --accent-100: #f8e0d3;
+    --accent-200: #f1c1a7;
+    --accent-300: #eaa27b;
+    --accent-400: #e3834f;
+    --accent-500: #dd6422;
+    --accent-600: #b0501c;
+    --accent-700: #843c15;
+    --accent-800: #58280e;
+    --accent-900: #2c1407;
+    --accent-950: #160a03;
+  }
+  .dark {
+    --text-50: #160316;
+    --text-100: #2c072c;
+    --text-200: #580e58;
+    --text-300: #841584;
+    --text-400: #b01cb0;
+    --text-500: #dd22dd;
+    --text-600: #e34fe3;
+    --text-700: #ea7bea;
+    --text-800: #f1a7f1;
+    --text-900: #f8d3f8;
+    --text-950: #fce9fc;
+
+    --background-50: #0f0a0f;
+    --background-100: #1f141f;
+    --background-200: #3d293d;
+    --background-300: #5c3d5c;
+    --background-400: #7a527a;
+    --background-500: #996699;
+    --background-600: #ad85ad;
+    --background-700: #c2a3c2;
+    --background-800: #d6c2d6;
+    --background-900: #ebe0eb;
+    --background-950: #f5f0f5;
+
+    --primary-50: #100911;
+    --primary-100: #201221;
+    --primary-200: #412343;
+    --primary-300: #613564;
+    --primary-400: #814686;
+    --primary-500: #a258a7;
+    --primary-600: #b479b9;
+    --primary-700: #c79bca;
+    --primary-800: #dabcdc;
+    --primary-900: #ecdeed;
+    --primary-950: #f6eef6;
+
+    --secondary-50: #110f09;
+    --secondary-100: #211e12;
+    --secondary-200: #433c23;
+    --secondary-300: #645b35;
+    --secondary-400: #867946;
+    --secondary-500: #a79758;
+    --secondary-600: #b9ac79;
+    --secondary-700: #cac19b;
+    --secondary-800: #dcd5bc;
+    --secondary-900: #edeade;
+    --secondary-950: #f6f5ee;
+
+    --accent-50: #160a03;
+    --accent-100: #2c1407;
+    --accent-200: #58280e;
+    --accent-300: #843c15;
+    --accent-400: #b0501c;
+    --accent-500: #dd6422;
+    --accent-600: #e3834f;
+    --accent-700: #eaa27b;
+    --accent-800: #f1c1a7;
+    --accent-900: #f8e0d3;
+    --accent-950: #fcefe9;
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --background: var(--background-100);
+  --foreground: var(--text-900);
+  --card: var(--background-50);
+  --card-foreground: var(--text-900);
+  --popover: var(--background-50);
+  --popover-foreground: var(--text-900);
+  --primary: var(--primary-500);
+  --primary-foreground: var(--primary-50);
+  --secondary: var(--secondary-500);
+  --secondary-foreground: var(--secondary-50);
+  --muted: var(--background-200);
+  --muted-foreground: var(--text-700);
+  --accent: var(--accent-500);
+  --accent-foreground: var(--accent-50);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: var(--background-300);
+  --input: var(--background-300);
+  --ring: var(--primary-400);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -40,25 +165,25 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: var(--background-800);
+  --foreground: var(--text-50);
+  --card: var(--background-900);
+  --card-foreground: var(--text-50);
+  --popover: var(--background-900);
+  --popover-foreground: var(--text-50);
+  --primary: var(--primary-500);
+  --primary-foreground: var(--primary-950);
+  --secondary: var(--secondary-600);
+  --secondary-foreground: var(--secondary-50);
+  --muted: var(--background-700);
+  --muted-foreground: var(--text-200);
+  --accent: var(--accent-500);
+  --accent-foreground: var(--accent-50);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+  --border: var(--background-700);
+  --input: var(--background-700);
+  --ring: var(--primary-500);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);

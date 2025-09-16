@@ -7,6 +7,28 @@ import { Badge } from "@/components/ui/badge"
 import type { Wine } from "@/lib/wines-data"
 import { ShoppingCart, Award } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
+import { useMemo, useState, useCallback } from "react"
+import { wineImageCandidates } from "@/lib/image-utils"
+
+function getWinePageUrl(wine: Wine): string {
+  const urlMappings: Record<string, string> = {
+    "domeni-blanc-2023": "/les-vins/domeni-blanc",
+    "domeni-rose-2023": "/les-vins/domeni-rose", 
+    "domeni-rouge-2021": "/les-vins/domeni-rouge",
+    "opus-blanc-2022": "/les-vins/opus-blanc",
+    "opus-rouge-2020": "/les-vins/opus-rouge",
+    "claire-de-lune-2022": "/les-vins/claire-de-lune",
+    "petrichor-rouge-2020": "/les-vins/petrichor-rouge",
+    "pigeonnier-rouge-2021": "/les-vins/pigeonnier",
+    "perle-blanc-2023": "/les-vins/perle",
+    "poussin-blanc-2024": "/les-vins/poussin-blanc",
+    "poussin-rose-2023": "/les-vins/poussin-rose",
+    "methode-blanc-2020": "/les-vins/methode-blanc",
+    "methode-rose-2020": "/les-vins/methode-rose"
+  }
+  
+  return urlMappings[wine.id] || `/les-vins/${wine.id}`
+}
 
 interface WineCardProps {
   wine: Wine
@@ -36,20 +58,31 @@ export function WineCard({ wine }: WineCardProps) {
     opus: "Opus",
   }
 
-  const typeLabels = {
+  const typeLabels: Record<string, string> = {
     rouge: "Rouge",
     blanc: "Blanc",
     rose: "Rosé",
     effervescent: "Effervescent",
   }
 
+  const candidates = useMemo(() => wineImageCandidates(wine), [wine])
+  const [imgIdx, setImgIdx] = useState(0)
+  const imgSrc = candidates[imgIdx] || "/wine-bottle-default.png"
+  const onImgError = useCallback(() => {
+    setImgIdx((i) => Math.min(i + 1, candidates.length - 1))
+  }, [candidates.length])
+
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden">
-      <div className="aspect-[3/4] bg-muted overflow-hidden">
+    <Card className="group relative overflow-hidden rounded-xl border bg-white shadow-sm hover:shadow-md transition-all duration-300 mx-auto max-w-[320px] border-t-4 border-wine-burgundy">
+      <div className="aspect-[3/4] bg-white overflow-hidden p-6">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={wine.image || "/wine-bottle-default.png"}
+          src={imgSrc}
           alt={wine.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={onImgError}
+          loading="lazy"
+          decoding="async"
+          className="mx-auto h-full w-[60%] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500"
         />
       </div>
       <CardContent className="p-6">
@@ -68,17 +101,17 @@ export function WineCard({ wine }: WineCardProps) {
           )}
         </div>
 
-        <h3 className="text-xl font-heading mb-2 group-hover:text-accent transition-colors">{wine.name}</h3>
+        <h3 className="text-lg font-heading mb-2 group-hover:text-accent transition-colors min-h-[3.25rem]">{wine.name}</h3>
 
         <p className="text-sm text-muted-foreground mb-1">Millésime {wine.vintage}</p>
 
         <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">{wine.description}</p>
 
-        <div className="flex items-center justify-between">
-          <div className="text-2xl font-heading text-accent">{wine.price}€</div>
+        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+          <div className="text-xl font-heading text-wine-burgundy">{wine.price}€</div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" asChild>
-              <Link href={`/les-vins/${wine.id}`}>Découvrir</Link>
+              <Link href={getWinePageUrl(wine)}>Découvrir</Link>
             </Button>
             <Button
               size="sm"

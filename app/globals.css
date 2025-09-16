@@ -1,82 +1,46 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css?family=Kaisei%20Decol:700|Noto%20Sans%20Bengali:400');
 
-@custom-variant dark (&:is(.dark *));
+/* Import des styles de grain et textures premium */
+@import '../styles/grain.css';
 
+/* Thème simple clair + nouvelles fontes */
 :root {
-  /* Cinematic Dark Theme as Default */
-  --background: oklch(0.12 0.05 20); /* Deep, dark charcoal */
-  --background-blended: oklch(0.12 0.05 20 / 0.85);
-  --foreground: oklch(0.973 0 0); /* Off-White #f8f8f8 */
-  --card: oklch(0.15 0.05 20); /* Slightly lighter charcoal for cards */
-  --card-foreground: oklch(0.973 0 0);
-  --popover: oklch(0.12 0.05 20);
-  --popover-foreground: oklch(0.973 0 0);
-  --primary: oklch(0.85 0.15 85); /* Rich Gold for primary actions */
-  --primary-foreground: oklch(0.12 0.05 20); /* Dark charcoal for text on primary */
-  --secondary: oklch(0.235 0.15 15); /* Dark Burgundy */
-  --secondary-foreground: oklch(0.973 0 0);
-  --muted: oklch(0.65 0.08 85); /* Matte Gold */
-  --muted-foreground: oklch(0.973 0 0 / 0.7); /* Lighter off-white for muted text */
-  --accent: oklch(0.85 0.15 85); /* Rich Gold for accents */
-  --accent-foreground: oklch(0.12 0.05 20);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.973 0 0);
-  --border: oklch(0.973 0 0 / 0.1); /* Subtle off-white border */
-  --input: oklch(0.973 0 0 / 0.1);
-  --ring: oklch(0.85 0.15 85); /* Rich Gold for focus rings */
-  --chart-1: oklch(0.235 0.15 15);
-  --chart-2: oklch(0.85 0.15 85);
-  --chart-3: oklch(0.65 0.08 85);
-  --chart-4: oklch(0.973 0 0);
-  --chart-5: oklch(0.82 0 0);
-  --radius: 0.5rem;
-  --sidebar: oklch(0.12 0.05 20);
-  --sidebar-foreground: oklch(0.973 0 0);
-  --sidebar-primary: oklch(0.235 0.15 15);
-  --sidebar-primary-foreground: oklch(0.973 0 0);
-  --sidebar-accent: oklch(0.85 0.15 85);
-  --sidebar-accent-foreground: oklch(0.12 0.05 20);
-  --sidebar-border: oklch(0.973 0 0 / 0.1);
-  --sidebar-ring: oklch(0.85 0.15 85);
+  /* Couleurs basiques pour rester compatibles avec les utilitaires existants */
+  --background: #ffffff;
+  --foreground: #111827; /* gris très foncé */
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+  --primary: #1f2937; /* gris anthracite */
+  --primary-foreground: #ffffff;
+  --secondary: #374151;
+  --secondary-foreground: #ffffff;
+  --muted: #f3f4f6;
+  --muted-foreground: #4b5563;
+  --accent: #c6a869; /* or doux */
+  --accent-foreground: #1f1d1a;
+  --destructive: #b91c1c;
+  --destructive-foreground: #ffffff;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #c6a869;
 
-  /* Wine estate specific colors */
-  --wine-gold: oklch(0.85 0.15 85);
-  --wine-dark: oklch(0.12 0.05 20);
-  --wine-black: oklch(0 0 0);
-  --wine-burgundy: oklch(0.235 0.15 15);
-  --wine-cream: oklch(0.973 0 0);
-}
-
-.light {
-  /* Light theme variables (swapped from dark) */
-  --background: oklch(0.973 0 0); /* Off-White #f8f8f8 */
-  --background-blended: oklch(0.973 0 0 / 0.85);
-  --foreground: oklch(0.12 0.05 20); /* Deep, dark charcoal */
-  --card: oklch(1 0 0); /* Pure White */
-  --card-foreground: oklch(0.12 0.05 20);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.12 0.05 20);
-  --primary: oklch(0.235 0.15 15); /* Dark Burgundy */
-  --primary-foreground: oklch(0.973 0 0);
-  --secondary: oklch(0.85 0.15 85); /* Rich Gold */
-  --secondary-foreground: oklch(0.12 0.05 20);
-  --muted: oklch(0.65 0.08 85);
-  --muted-foreground: oklch(0.12 0.05 20);
-  --accent: oklch(0.235 0.15 15);
-  --accent-foreground: oklch(0.973 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.973 0 0);
-  --border: oklch(0.12 0.05 20 / 0.1);
-  --input: oklch(0.12 0.05 20 / 0.1);
-  --ring: oklch(0.235 0.15 15);
+  /* Couleurs spécifiques vin (toujours utilisées dans le site) */
+  --wine-gold: #c6a869;
+  --wine-dark: #1f1d1a;
+  --wine-black: #000000;
+  --wine-burgundy: #7a1f2b;
+  --wine-cream: #f8f5ee;
 }
 
 @theme inline {
-  /* Added Libertinus Serif font variables */
-  --font-serif: "Libertinus Serif", serif;
-  --font-sans: "DM Sans", var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Fontes directement mappées aux utilitaires Tailwind */
+  --font-serif: 'Kaisei Decol', serif;
+  --font-sans: 'Noto Sans Bengali', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
+
+  /* Mapping des couleurs vers les utilitaires bg-*, text-* etc. */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -96,25 +60,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  /* Added wine estate color tokens */
   --color-wine-gold: var(--wine-gold);
   --color-wine-dark: var(--wine-dark);
   --color-wine-black: var(--wine-black);
@@ -122,51 +67,174 @@
   --color-wine-cream: var(--wine-cream);
 }
 
+/* Application des nouvelles fontes + tailles typographiques */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
     @apply bg-background text-foreground;
-    /* Added smooth scrolling for cinematic experience */
-    scroll-behavior: smooth;
-    font-size: 17px; /* Increase base font size for readability */
-    letter-spacing: 0.01em;
+    font-family: 'Noto Sans Bengali';
+    font-weight: 400;
   }
 
-  /* Added custom font classes for wine estate typography */
-  .font-serif {
-    font-family: var(--font-serif);
+  h1, h2, h3, h4, h5 {
+    font-family: 'Kaisei Decol';
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  /* Classes de compatibilité utilisées dans les composants */
+  .font-heading {
+    font-family: 'Kaisei Decol';
+    font-weight: 700;
   }
 
   .font-display {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    line-height: 1.2; /* Tighter line height for display text */
-  }
-
-  .font-heading {
-    font-family: var(--font-serif);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.3; /* Slightly more line height for headings */
+    font-family: 'Kaisei Decol';
+    font-weight: 700;
   }
 }
 
-/* Performance optimization for animations */
-.will-change-transform {
+html { font-size: 100%; }
+h1 { font-size: 4.210rem; }
+h2 { font-size: 3.158rem; }
+h3 { font-size: 2.369rem; }
+h4 { font-size: 1.777rem; }
+h5 { font-size: 1.333rem; }
+small { font-size: 0.750rem; }
+
+/* GSAP ScrollSmoother Styles */
+.smooth-wrapper {
+  overflow: hidden;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.smooth-content {
+  overflow: visible;
+  width: 100%;
+}
+
+/* Optimisations pour les performances */
+.smooth-wrapper,
+.smooth-content {
   will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
-/* Luxury focus states */
-@layer utilities {
-  .focus-wine {
-    @apply focus:outline-none focus:ring-2 focus:ring-wine-gold focus:ring-offset-2;
-  }
+/* Classes d'animation pour les textes cinématographiques */
+.text-line {
+  display: block;
+  overflow: hidden;
+}
 
-  .focus-wine-inset {
-    @apply focus:outline-none focus:ring-2 focus:ring-wine-gold focus:ring-inset;
+/* Effet de text shadow pour le style cinématographique */
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Smooth scrolling pour les navigateurs qui ne supportent pas GSAP */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
+/* Classes utilitaires personnalisées */
+.scale-130 {
+  transform: scale(1.3) !important;
+}
+
+/* Effet hover pour les images de vin */
+.group:hover .group-hover\:scale-130 {
+  transform: scale(1.3) !important;
+}
+
+/* Conteneur de bouteille spécifique */
+.wine-bottle-container {
+  cursor: pointer;
+}
+
+.wine-bottle-container img:hover {
+  transform: scale(1.3) !important;
+  transition: transform 0.5s ease-out;
+}
+
+/* Assurer la compatibilité navigateur */
+@supports not (backdrop-filter: blur(10px)) {
+  .wine-modal-backdrop {
+    background: rgba(0, 0, 0, 0.9);
+  }
+}
+
+/* Styles pour le modal d'image de vin */
+.wine-modal-backdrop {
+  backdrop-filter: blur(10px);
+}
+
+.wine-modal-image {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Effet de brillance au hover pour les bouteilles */
+.wine-bottle-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.wine-bottle-hover::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.8s ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wine-bottle-hover:hover::before {
+  transform: translateX(100%);
+}
+
+/* Respect des préférences d'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  .smooth-wrapper {
+    position: static !important;
+    overflow: auto !important;
+    height: auto !important;
+  }
+  
+  .smooth-content {
+    transform: none !important;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Désactiver l'effet hover en mode réduit */
+  .group-hover\:scale-130 {
+    transform: none !important;
+  }
+}

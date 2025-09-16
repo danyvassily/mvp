@@ -63,3 +63,4 @@ Notes d’implémentation (conseils rapides)
 - SEO: ajouter app/sitemap.ts (sitemap XML) et public/robots.txt; compléter metadata par page.
 - i18n: démarrer par FR par défaut, EN partiel (navigation, hero, CTA) puis étendre texte long.
 
+https://www.hotel-royal.it/en/enjoy/south-tyrolean-winehttps://www.hotel-royal.it/en/enjoy/south-tyrolean-winehttps://www.hotel-royal.it/en/enjoy/south-tyrolean-winehttps://www.hotel-royal.it/en/enjoy/south-tyrolean-winehttps://www.hotel-royal.it/en/enjoy/south-tyrolean-winehttps://www.hotel-royal.it/en/enjoy/south-tyrolean-wine

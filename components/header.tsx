@@ -6,50 +6,34 @@ import { Button } from "@/components/ui/button"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { CartSheet } from "./cart-sheet"
 import { UserMenu } from "./user-menu"
-import { gsap } from "gsap"
-import { useGSAP } from "@gsap/react"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
+// No GSAP for header color toggle; we use scroll listener for reliability
 import Image from "next/image"
-
-gsap.registerPlugin(ScrollTrigger)
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const headerRef = useRef(null)
+  const headerRef = useRef<HTMLHeadingElement | null>(null)
+  const [scrolled, setScrolled] = useState(false)
 
-  useGSAP(() => {
-    gsap.fromTo(
-      headerRef.current,
-      {
-        backgroundColor: "transparent",
-        borderBottomColor: "transparent",
-      },
-      {
-        backgroundColor: "var(--background-blended)",
-        borderBottomColor: "var(--border)",
-        duration: 0.5,
-        ease: "power2.inOut",
-        scrollTrigger: {
-          trigger: "body",
-          start: "top top",
-          end: "+=100",
-          scrub: true,
-        },
-      },
-    )
-  })
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 2)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   return (
     <header
-      ref={headerRef}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-transparent bg-transparent"
+      ref={headerRef as any}
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-colors duration-300 ${
+        scrolled ? "bg-white border-border" : "bg-white/60 border-transparent"
+      }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-20 relative">
           {/* Left Navigation - Desktop */}
           <nav className="hidden lg:flex items-center space-x-6">
             <div className="relative group">
-              <button className="flex items-center space-x-1 text-white hover:text-primary transition-colors">
+              <button className="flex items-center space-x-1 text-black hover:text-primary transition-colors text-xl">
                 <span>Le Domaine</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
@@ -82,7 +66,7 @@ export function Header() {
             </div>
 
             <div className="relative group">
-              <button className="flex items-center space-x-1 text-white hover:text-primary transition-colors">
+              <button className="flex items-center space-x-1 text-black hover:text-primary transition-colors text-xl">
                 <span>Savoir-Faire</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
@@ -102,13 +86,13 @@ export function Header() {
               </div>
             </div>
 
-            <Link href="/les-vins" className="text-white hover:text-primary transition-colors">
+            <Link href="/les-vins" className="text-black hover:text-primary transition-colors text-xl">
               Nos Vins
             </Link>
-            <Link href="/actualites" className="text-white hover:text-primary transition-colors">
+            <Link href="/actualites" className="text-black hover:text-primary transition-colors text-xl">
               Actualités
             </Link>
-            <Link href="/presse" className="text-white hover:text-primary transition-colors">
+            <Link href="/presse" className="text-black hover:text-primary transition-colors text-xl">
               Presse
             </Link>
           </nav>
@@ -120,21 +104,21 @@ export function Header() {
                 alt="Château Lastours"
                 width={150}
                 height={48}
-                className="h-12 w-auto"
+                priority
               />
             </Link>
           </div>
 
           {/* Right Navigation & Actions - Desktop */}
           <div className="hidden lg:flex items-center space-x-6">
-             <Link href="/gastronomie" className="text-white hover:text-primary transition-colors">
+             <Link href="/gastronomie" className="text-black hover:text-primary transition-colors text-xl">
               Gastronomie
             </Link>
-            <Link href="/ou-nous-trouver" className="text-white hover:text-primary transition-colors">
+            <Link href="/ou-nous-trouver" className="text-black hover:text-primary transition-colors text-xl">
               Où nous trouver
             </Link>
             <div className="relative group">
-              <button className="flex items-center space-x-1 text-white hover:text-primary transition-colors">
+              <button className="flex items-center space-x-1 text-black hover:text-primary transition-colors text-xl">
                 <span>Expériences</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
@@ -170,7 +154,7 @@ export function Header() {
             <UserMenu />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-2 text-black hover:bg-black/10 rounded-md transition-colors"
               aria-label="Menu de navigation"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -179,7 +163,7 @@ export function Header() {
         </div>
 
         {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-border bg-background/95 backdrop-blur-sm">
+          <div className="lg:hidden py-4 border-t border-border bg-background/95 backdrop-blur-sm text-lg">
             <nav className="flex flex-col space-y-1">
               <Link href="/domaine/histoire" className="px-3 py-2 rounded hover:bg-accent/10">
                 Le Domaine — Histoire

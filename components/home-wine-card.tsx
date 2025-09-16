@@ -16,16 +16,16 @@ interface HomeWineCardProps {
 export function HomeWineCard({ wine, className }: HomeWineCardProps) {
   return (
     <Card
-      className={`group relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 ease-out transform hover:-translate-y-2 ${className}`}
+      className={`group relative overflow-hidden rounded-xl border bg-white shadow-sm hover:shadow-md transition-all duration-300 mx-auto max-w-[320px] border-t-4 border-wine-burgundy ${className}`}
     >
       <Link href={`/les-vins/${wine.id}`} className="block">
-        <div className="aspect-[3/4] bg-white overflow-hidden">
+        <div className="aspect-[3/4] bg-white overflow-hidden p-6">
           <Image
             src={wine.image || "/wine-bottle-default.png"}
             alt={wine.name}
             width={400}
             height={600}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
+            className="mx-auto h-full w-[60%] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500 ease-out"
           />
         </div>
       </Link>
@@ -36,13 +36,15 @@ export function HomeWineCard({ wine, className }: HomeWineCardProps) {
               {wine.vintage}
             </Badge>
           </div>
-          <h3 className="text-xl font-display text-gray-900 group-hover:text-wine-gold transition-colors duration-300 mb-2 min-h-[3.5rem]">
+          <h3 className="text-lg font-display text-gray-900 group-hover:text-wine-gold transition-colors duration-300 mb-2 min-h-[3.25rem]">
             <Link href={`/les-vins/${wine.id}`}>{wine.name}</Link>
           </h3>
-          <p className="text-sm text-gray-600 mb-4 min-h-[3rem] overflow-hidden">{wine.description}</p>
+          <p className="text-sm text-gray-600 mb-4 min-h-[3rem] overflow-hidden">
+            {wine.description}
+          </p>
         </div>
         <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
-          <p className="text-2xl font-heading text-wine-burgundy">{wine.price}€</p>
+          <p className="text-xl font-heading text-wine-burgundy">{wine.price}€</p>
           <Button
             size="sm"
             variant="outline"

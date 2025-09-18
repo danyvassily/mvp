@@ -1,0 +1,90 @@
+[build]
+  publish = "out"
+  command = "pnpm install && pnpm run build"
+
+[build.environment]
+  NODE_VERSION = "18"
+  PNPM_VERSION = "8"
+  NPM_FLAGS = "--version"
+
+# Configuration pour Next.js avec export statique
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Redirections pour les routes dynamiques et SPA
+[[redirects]]
+  from = "/les-vins/*"
+  to = "/les-vins/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/actualites/*"
+  to = "/actualites/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/evenements/*"
+  to = "/evenements/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/club/*"
+  to = "/club/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/domaine/*"
+  to = "/domaine/:splat"
+  status = 200
+
+# Redirection pour les anciennes URLs (si nécessaire)
+[[redirects]]
+  from = "/home"
+  to = "/"
+  status = 301
+
+# Headers de sécurité et performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.pdf"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    Content-Type = "application/pdf"

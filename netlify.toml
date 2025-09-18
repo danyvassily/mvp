@@ -1,20 +1,20 @@
 [build]
   # Configuration Netlify pour Next.js 15 avec export statique
-  publish = ".next"
-  command = "npm install -g pnpm@8 && pnpm install && pnpm run build"
+  publish = "out"
+  command = "pnpm install --frozen-lockfile && pnpm run build"
 
 [build.environment]
   NODE_VERSION = "18"
   PNPM_VERSION = "8"
   NPM_FLAGS = "--version"
   # Configuration pour export statique Next.js 15
-  NETLIFY_PUBLISH_DIR = ".next"
+  NETLIFY_PUBLISH_DIR = "out"
 
 # Export statique Next.js - pas besoin du plugin Netlify Next.js
 # [[plugins]]
 #   package = "@netlify/plugin-nextjs"
 
-# Redirections pour les routes dynamiques et SPA
+# Configuration des redirections pour les routes dynamiques
 [[redirects]]
   from = "/les-vins/*"
   to = "/les-vins/:splat"
@@ -40,22 +40,22 @@
   to = "/domaine/:splat"
   status = 200
 
-# Redirection pour les anciennes URLs (si nécessaire)
 [[redirects]]
   from = "/home"
   to = "/"
   status = 301
 
-# Headers de sécurité et performance
+# Configuration des en-têtes de sécurité
 [[headers]]
   for = "/*"
   [headers.values]
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
+# Cache optimisé pour les assets statiques
 [[headers]]
   for = "/assets/*"
   [headers.values]

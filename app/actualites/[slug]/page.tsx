@@ -1,11 +1,17 @@
 import { Header } from "@/components/header"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getArticleBySlug, getLatestArticles } from "@/lib/news-data"
+import { getArticleBySlug, getLatestArticles, articles } from "@/lib/news-data"
 import Link from "next/link"
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>
+}
+
+export async function generateStaticParams() {
+  return articles.map((article) => ({
+    slug: article.slug,
+  }))
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {

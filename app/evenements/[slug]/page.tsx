@@ -2,13 +2,19 @@ import { Header } from "@/components/header"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getEventBySlug } from "@/lib/events-data"
+import { getEventBySlug, events } from "@/lib/events-data"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, Users, MapPin, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface EventPageProps {
   params: Promise<{ slug: string }>
+}
+
+export async function generateStaticParams() {
+  return events.map((event) => ({
+    slug: event.slug,
+  }))
 }
 
 export default async function EventPage({ params }: EventPageProps) {

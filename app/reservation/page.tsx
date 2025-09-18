@@ -56,7 +56,7 @@ export default function ReservationPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Reservation submitted:", formData)
+    // console.log("Reservation submitted:", formData) // Disabled in production
   }
 
   const updateFormData = (field: string, value: string) => {

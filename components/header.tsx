@@ -2,11 +2,9 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Menu, X, ChevronDown } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { CartSheet } from "./cart-sheet"
 import { UserMenu } from "./user-menu"
-import { TransitionLink } from "./gsap/TransitionLink"
 // No GSAP for header color toggle; we use scroll listener for reliability
 import Image from "next/image"
 
@@ -15,12 +13,37 @@ export function Header() {
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null)
   const headerRef = useRef<HTMLHeadingElement | null>(null)
   const [scrolled, setScrolled] = useState(false)
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  const clearCloseTimeout = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+  }
+
+  const scheduleMenuClose = () => {
+    clearCloseTimeout()
+    closeTimeoutRef.current = setTimeout(() => {
+      setHoveredMenu(null)
+      closeTimeoutRef.current = null
+    }, 150)
+  }
+
+  const openMenu = (key: string) => {
+    clearCloseTimeout()
+    setHoveredMenu(key)
+  }
+
+  useEffect(() => {
+    return () => clearCloseTimeout()
   }, [])
 
   return (
@@ -36,12 +59,22 @@ export function Header() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-20 relative">
           {/* Left Navigation - Desktop */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav 
+            className="hidden lg:flex items-center space-x-8"
+            onMouseLeave={scheduleMenuClose}
+            onMouseEnter={clearCloseTimeout}
+            onFocusCapture={clearCloseTimeout}
+            onBlurCapture={scheduleMenuClose}
+          >
             <div className="relative">
               <button 
                 className="flex items-center space-x-1 transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
-                onMouseEnter={() => setHoveredMenu('domaine')}
-                onMouseLeave={() => setHoveredMenu(null)}
+                type="button"
+                aria-expanded={hoveredMenu === 'domaine' ? 'true' : 'false'}
+                aria-haspopup="true"
+                onMouseEnter={() => openMenu('domaine')}
+                onFocus={() => openMenu('domaine')}
+                onClick={() => openMenu('domaine')}
               >
                 <span>Le Domaine</span>
               </button>
@@ -50,19 +83,30 @@ export function Header() {
             <div className="relative">
               <button 
                 className="flex items-center space-x-1 transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
-                onMouseEnter={() => setHoveredMenu('savoir-faire')}
-                onMouseLeave={() => setHoveredMenu(null)}
+                type="button"
+                aria-expanded={hoveredMenu === 'savoir-faire' ? 'true' : 'false'}
+                aria-haspopup="true"
+                onMouseEnter={() => openMenu('savoir-faire')}
+                onFocus={() => openMenu('savoir-faire')}
+                onClick={() => openMenu('savoir-faire')}
               >
                 <span>Savoir-Faire</span>
               </button>
             </div>
 
-            <TransitionLink 
-              href="/les-vins" 
-              className="transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
-            >
-              Nos Vins
-            </TransitionLink>
+            <div className="relative">
+              <button 
+                className="flex items-center space-x-1 transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
+                type="button"
+                aria-expanded={hoveredMenu === 'vins' ? 'true' : 'false'}
+                aria-haspopup="true"
+                onMouseEnter={() => openMenu('vins')}
+                onFocus={() => openMenu('vins')}
+                onClick={() => openMenu('vins')}
+              >
+                <span>Nos Vins</span>
+              </button>
+            </div>
           </nav>
           
           <div className="absolute left-1/2 -translate-x-1/2">
@@ -83,8 +127,12 @@ export function Header() {
             <div className="relative">
               <button 
                 className="transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
-                onMouseEnter={() => setHoveredMenu('experiences')}
-                onMouseLeave={() => setHoveredMenu(null)}
+                type="button"
+                aria-expanded={hoveredMenu === 'experiences' ? 'true' : 'false'}
+                aria-haspopup="true"
+                onMouseEnter={() => openMenu('experiences')}
+                onFocus={() => openMenu('experiences')}
+                onClick={() => openMenu('experiences')}
               >
                 Expériences
               </button>
@@ -148,7 +196,46 @@ export function Header() {
               </Link>
 
               <Link href="/les-vins" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins
+                Nos Vins — Toutes les cuvées
+              </Link>
+              <Link href="/les-vins/perle" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Perle
+              </Link>
+              <Link href="/les-vins/domeni-blanc" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Domeni Blanc
+              </Link>
+              <Link href="/les-vins/opus-blanc" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Opus Blanc
+              </Link>
+              <Link href="/les-vins/methode-blanc" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Méthode Blanc
+              </Link>
+              <Link href="/les-vins/poussin-blanc" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Poussin Blanc
+              </Link>
+              <Link href="/les-vins/poussin-rose" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Poussin Rosé
+              </Link>
+              <Link href="/les-vins/domeni-rose" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Domeni Rosé
+              </Link>
+              <Link href="/les-vins/methode-rose" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Méthode Rosé
+              </Link>
+              <Link href="/les-vins/opus-rouge" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Opus Rouge
+              </Link>
+              <Link href="/les-vins/domeni-rouge" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Domeni Rouge
+              </Link>
+              <Link href="/les-vins/petrichor-rouge" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Pétrichor Rouge
+              </Link>
+              <Link href="/les-vins/claire-de-lune" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Claire de Lune
+              </Link>
+              <Link href="/les-vins/pigeonnier" className="px-3 py-2 rounded hover:bg-accent/10">
+                Nos Vins — Pigeonnier
               </Link>
               <Link href="/gastronomie" className="px-3 py-2 rounded hover:bg-accent/10">
                 Gastronomie
@@ -188,8 +275,10 @@ export function Header() {
     {hoveredMenu && (
       <div 
         className="fixed top-20 left-0 right-0 z-40 transition-all duration-500 bg-white/98 backdrop-blur-lg border-b border-gray-200/30 shadow-lg"
-        onMouseEnter={() => setHoveredMenu(hoveredMenu)}
-        onMouseLeave={() => setHoveredMenu(null)}
+        onMouseEnter={clearCloseTimeout}
+        onMouseLeave={scheduleMenuClose}
+        onFocusCapture={clearCloseTimeout}
+        onBlurCapture={scheduleMenuClose}
       >
         <div className="container mx-auto px-4 lg:px-8 py-12">
           {hoveredMenu === 'domaine' && (
@@ -272,6 +361,94 @@ export function Header() {
                   <div className="absolute bottom-4 left-4">
                     <p className="text-white text-sm font-medium">Découvrez notre patrimoine</p>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {hoveredMenu === 'vins' && (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold tracking-wide mb-4 text-slate-900">
+                  Blancs
+                </h3>
+                <div className="space-y-3">
+                  <Link href="/les-vins" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Toutes les cuvées
+                  </Link>
+                  <Link href="/les-vins/perle" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Perle
+                  </Link>
+                  <Link href="/les-vins/domeni-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Domeni Blanc
+                  </Link>
+                  <Link href="/les-vins/opus-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Opus Blanc
+                  </Link>
+                  <Link href="/les-vins/methode-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Méthode Blanc
+                  </Link>
+                  <Link href="/les-vins/poussin-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Poussin Blanc
+                  </Link>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold tracking-wide mb-4 text-slate-900">
+                  Rosés
+                </h3>
+                <div className="space-y-3">
+                  <Link href="/les-vins/poussin-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Poussin Rosé
+                  </Link>
+                  <Link href="/les-vins/domeni-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Domeni Rosé
+                  </Link>
+                  <Link href="/les-vins/methode-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Méthode Rosé
+                  </Link>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold tracking-wide mb-4 text-slate-900">
+                  Rouges
+                </h3>
+                <div className="space-y-3">
+                  <Link href="/les-vins/opus-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Opus Rouge
+                  </Link>
+                  <Link href="/les-vins/domeni-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Domeni Rouge
+                  </Link>
+                  <Link href="/les-vins/petrichor-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Pétrichor Rouge
+                  </Link>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="relative h-48 bg-gradient-to-b from-slate-200 to-slate-300 rounded-lg overflow-hidden">
+                  <Image
+                    src="/photos/lastours017.jpg"
+                    alt="Nos vins"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/30" />
+                  <div className="absolute bottom-4 left-4">
+                    <p className="text-white text-sm font-medium">Explorez toute la gamme</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <Link href="/les-vins/claire-de-lune" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Claire de Lune
+                  </Link>
+                  <Link href="/les-vins/pigeonnier" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                    Pigeonnier
+                  </Link>
                 </div>
               </div>
             </div>

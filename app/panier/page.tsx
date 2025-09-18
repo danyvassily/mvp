@@ -23,7 +23,7 @@ export default function CartPage() {
       return
     }
     // Proceed to checkout
-    console.log("Proceeding to checkout...")
+    // console.log("Proceeding to checkout...") // Disabled in production
   }
 
   if (cartState.items.length === 0) {

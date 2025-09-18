@@ -46,7 +46,7 @@ export default function InscriptionPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Handle form submission
-    console.log("Form submitted:", formData)
+    // console.log("Form submitted:", formData) // Disabled in production
   }
 
   const updateFormData = (field: string, value: string | boolean) => {

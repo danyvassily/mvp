@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function WinesPageSimple() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black relative">
+    <div className="min-h-screen bg-white text-slate-900 relative">
       {/* Grain overlay for cinematic effect */}
       <div 
         className="fixed inset-0 opacity-20 pointer-events-none" 
@@ -42,6 +42,15 @@ export default function WinesPageSimple() {
             </CinematicTextAnimation>
           </div>
         </HeroBarrelsAnimation>
+      </section>
+
+      {/* Intro Blurb */}
+      <section className="relative z-10">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="-mt-16 lg:-mt-24 max-w-4xl mx-auto text-base md:text-lg text-slate-700 leading-relaxed font-light bg-white rounded-2xl px-6 py-6 border border-slate-200">
+            De Doméni, qui exprime l'âme du terroir du Château Lastours, aux cuvées Opus issues de nos parcelles d'exception, chaque gamme raconte un chapitre de notre savoir-faire. Nos Méthodes Traditionnelles perpétuent la finesse des bulles ancestrales, tandis que Poussin offre une découverte gourmande et accessible. Les cuvées Signatures enfin dévoilent les créations rares du domaine, pour les amateurs en quête d'émotions singulières.
+          </div>
+        </div>
       </section>
 
       {/* Gammes Section */}

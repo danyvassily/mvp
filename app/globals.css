@@ -178,6 +178,7 @@ small { font-size: 0.750rem; }
 /* Styles pour le modal d'image de vin */
 .wine-modal-backdrop {
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .wine-modal-image {

@@ -1,18 +1,18 @@
 [build]
-  # Configuration Netlify pour Next.js 15 avec export statique
-  publish = "out"
+  # Configuration Netlify pour Next.js 15 avec plugin Next.js
+  publish = ".next"
   command = "pnpm install --frozen-lockfile && pnpm run build"
 
 [build.environment]
   NODE_VERSION = "18"
   PNPM_VERSION = "8"
   NPM_FLAGS = "--version"
-  # Configuration pour export statique Next.js 15
-  NETLIFY_PUBLISH_DIR = "out"
+  # Configuration pour Next.js avec plugin Netlify
+  NETLIFY_PUBLISH_DIR = ".next"
 
-# Export statique Next.js - pas besoin du plugin Netlify Next.js
-# [[plugins]]
-#   package = "@netlify/plugin-nextjs"
+# Plugin Next.js pour le déploiement SSR
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # Configuration des redirections pour les routes dynamiques
 [[redirects]]

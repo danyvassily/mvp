@@ -10,11 +10,7 @@ interface WinePageProps {
   }>
 }
 
-export async function generateStaticParams() {
-  return wines.map((wine) => ({
-    slug: wine.id,
-  }))
-}
+// generateStaticParams() non nécessaire avec le plugin Netlify Next.js
 
 export default async function WinePage({ params }: WinePageProps) {
   const { slug } = await params

@@ -1,15 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configuration pour export statique Netlify
-  output: "export",
+  // Configuration pour déploiement Netlify avec plugin Next.js
   trailingSlash: true,
   experimental: {
     optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
   },
 
-  // Optimisations images pour export statique
+  // Optimisations images pour Netlify
   images: {
-    unoptimized: true, // Requis pour export statique
+    unoptimized: false, // Optimisation activée pour Netlify
     formats: ["image/avif", "image/webp"],
     domains: ["localhost"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],

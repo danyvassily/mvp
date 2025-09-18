@@ -79,3 +79,7 @@ public/_netlify
 
 # Logs de build
 build-errors.log
+
+# Sauvegarde complète des assets (non utilisée)
+public_backup_full/
+

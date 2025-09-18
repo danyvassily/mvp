@@ -1,15 +1,18 @@
 [build]
-  publish = "out"
-  command = "pnpm install && pnpm run build"
+  # Configuration Netlify pour Next.js 15 avec export statique
+  publish = ".next"
+  command = "npm install -g pnpm@8 && pnpm install && pnpm run build"
 
 [build.environment]
   NODE_VERSION = "18"
   PNPM_VERSION = "8"
   NPM_FLAGS = "--version"
+  # Configuration pour export statique Next.js 15
+  NETLIFY_PUBLISH_DIR = ".next"
 
-# Configuration pour Next.js avec export statique
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+# Export statique Next.js - pas besoin du plugin Netlify Next.js
+# [[plugins]]
+#   package = "@netlify/plugin-nextjs"
 
 # Redirections pour les routes dynamiques et SPA
 [[redirects]]

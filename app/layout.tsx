@@ -10,10 +10,23 @@ import { Toaster } from "@/components/ui/toaster"
 import { ClientLayout } from "@/components/ClientLayout"
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://chateau-lastours.netlify.app'),
   title: "Châteaux Lastours - Domaine Viticole de Prestige",
   description:
     "Découvrez l'excellence viticole du sud de la France avec Châteaux Lastours. Vins d'exception, terroir unique, tradition et savoir-faire.",
   generator: "v0.app",
+  openGraph: {
+    title: "Châteaux Lastours - Domaine Viticole de Prestige",
+    description: "Découvrez l'excellence viticole du sud de la France avec Châteaux Lastours. Vins d'exception, terroir unique, tradition et savoir-faire.",
+    url: 'https://chateau-lastours.netlify.app',
+    siteName: 'Châteaux Lastours',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Châteaux Lastours - Domaine Viticole de Prestige",
+    description: "Découvrez l'excellence viticole du sud de la France avec Châteaux Lastours. Vins d'exception, terroir unique, tradition et savoir-faire.",
+  },
 }
 
 export default function RootLayout({

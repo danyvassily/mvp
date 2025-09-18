@@ -54,3 +54,28 @@ build-errors.log
 structure.html
 STRUCTURE.md
 *.md.backup
+
+# Dossiers de photos volumineux (éviter Git LFS)
+public/PHOTOS-WEB-LASTOURS*/
+public/photos/
+public/*backup*/
+public/*old*/
+public/*clean*/
+*.zip
+*.rar
+*.tar.gz
+
+# Fichiers images volumineux (> 1MB)
+*.mov
+*.mp4
+*.avi# Fichiers d'optimisation temporaires
+.public_used/
+*-optimized.jpg
+*-optimized.png
+
+# Dossiers de développement
+audit/
+public/_netlify
+
+# Logs de build
+build-errors.log

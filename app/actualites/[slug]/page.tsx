@@ -8,7 +8,12 @@ interface ArticlePageProps {
   params: Promise<{ slug: string }>
 }
 
-// generateStaticParams() non nécessaire avec le plugin Netlify Next.js
+// Génération des pages statiques pour l'export
+export async function generateStaticParams() {
+  return articles.map((article) => ({
+    slug: article.slug,
+  }))
+}
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params

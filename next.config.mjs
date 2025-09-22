@@ -1,14 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configuration pour déploiement Netlify avec plugin Next.js
+  // Configuration pour déploiement Netlify statique
+  output: "export",
   trailingSlash: true,
   experimental: {
     optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
   },
 
-  // Optimisations images pour Netlify
+  // Optimisations images pour Netlify statique
   images: {
-    unoptimized: false, // Optimisation activée pour Netlify
+    unoptimized: true, // Nécessaire pour l'export statique
     formats: ["image/avif", "image/webp"],
     domains: ["localhost"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -37,39 +38,9 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
 
-  // Headers de sécurité
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "X-DNS-Prefetch-Control",
-            value: "on",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
-          },
-        ],
-      },
-    ];
-  },
+  // Les headers sont gérés par netlify.toml pour l'export statique
 
-  // Redirections et réécritures
-  async redirects() {
-    return [
-      {
-        source: "/home",
-        destination: "/",
-        permanent: true,
-      },
-    ];
-  },
+  // Les redirections sont gérées par netlify.toml pour l'export statique
 };
 
 export default nextConfig;

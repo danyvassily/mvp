@@ -22,11 +22,9 @@
     "start": "next start",
     "test": "vitest run",
     "netlify-build": "next build",
-    "vercel-build": "next build",
     "check-types": "tsc --noEmit",
-    "prepare-deploy": "pnpm run check-types && pnpm run lint && pnpm run build",
-    "export": "next export",
-    "build:static": "next build && next export"
+    "prepare-netlify": "pnpm run check-types && pnpm run build",
+    "clean": "rm -rf .next out"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

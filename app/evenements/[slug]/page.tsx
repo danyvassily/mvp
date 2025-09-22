@@ -11,7 +11,12 @@ interface EventPageProps {
   params: Promise<{ slug: string }>
 }
 
-// generateStaticParams() non nécessaire avec le plugin Netlify Next.js
+// Génération des pages statiques pour l'export
+export async function generateStaticParams() {
+  return events.map((event) => ({
+    slug: event.slug,
+  }))
+}
 
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params

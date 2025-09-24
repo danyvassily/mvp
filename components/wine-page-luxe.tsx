@@ -91,7 +91,7 @@ export function WinePageLuxe({ wine, imagePath, pdfPath }: WinePageLuxeProps) {
             
             {/* Image de la bouteille avec hover et modal */}
             <div className="flex justify-center">
-              <ZoomReveal scale={1.15} duration={2.5}>
+              <ZoomReveal scale={1.05} duration={2.0}>
                 <div className="relative p-8 rounded-2xl backdrop-blur-sm bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden">
                   <div 
                     className="relative overflow-hidden cursor-pointer group wine-bottle-container"
@@ -101,7 +101,7 @@ export function WinePageLuxe({ wine, imagePath, pdfPath }: WinePageLuxeProps) {
                     <img
                       src={imagePath}
                       alt={wine.name}
-                      className="h-[400px] lg:h-[500px] w-auto object-contain drop-shadow-2xl filter brightness-110 transition-transform duration-500 ease-out hover:scale-130"
+                      className="h-[400px] lg:h-[500px] w-auto object-contain drop-shadow-2xl filter brightness-110 transition-transform duration-300 ease-out hover:scale-105"
                       style={{
                         transformOrigin: 'center center'
                       }}

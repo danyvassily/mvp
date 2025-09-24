@@ -1,19 +1,14 @@
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { Card, CardContent } from "@/components/ui/card"
 
 export default function EngagementPage() {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-
-      <main className="pt-20">
         {/* Hero Section */}
         <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: "url('/terroir-landscape-with-vineyard-rows-and-hills.png')",
+              backgroundImage: "url('/Page/Nos Engagement - ok/bulle-de-jazz-2021-chazo-127.jpg')",
             }}
           />
           <div className="absolute inset-0 bg-black/40" />
@@ -93,7 +88,7 @@ export default function EngagementPage() {
                 </div>
                 <div className="aspect-square bg-muted rounded-lg overflow-hidden">
                   <img
-                    src="/sustainable-vineyard-practices.png"
+                    src="/Page/Nos Engagement - ok/1682596442650.jpg"
                     alt="Pratiques viticoles durables"
                     className="w-full h-full object-cover"
                   />
@@ -103,7 +98,7 @@ export default function EngagementPage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
                 <div className="order-2 lg:order-1 aspect-square bg-muted rounded-lg overflow-hidden">
                   <img
-                    src="/confusion-sexuelle-vineyard.png"
+                    src="/Page/Nos Engagement - ok/IMG_20230808_201123 - pas bonne taille.jpg"
                     alt="Confusion sexuelle dans les vignes"
                     className="w-full h-full object-cover"
                   />
@@ -138,7 +133,7 @@ export default function EngagementPage() {
                 </div>
                 <div className="aspect-square bg-muted rounded-lg overflow-hidden">
                   <img
-                    src="/biodiversity-vineyard-ecosystem.png"
+                    src="/Page/Notre vignoble - manque 1 photo/vignes.jpg"
                     alt="Écosystème viticole biodiversifié"
                     className="w-full h-full object-cover"
                   />
@@ -168,8 +163,6 @@ export default function EngagementPage() {
             </div>
           </div>
         </section>
-      </main>
-
     </div>
   )
 }

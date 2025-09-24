@@ -50,14 +50,14 @@ const terroirData = {
     title: "Des Cépages Autochtones Uniques",
     description: "Ce terroir vivant, vibrant, offre une expression rare de cépages autochtones : Mauzac, frais, évoquant la pomme verte et les fleurs blanches ; Loin de l'œil, un raisin blanc rare, quasi uniquement cultivé à Gaillac, connu pour produire des vins frais et fruités ; Duras, puissant, épicé et fruité ; Braucol, intense et sauvage, aux arômes de fruits noirs et d'épices ; Prunelard, puissant aux notes de fruits noirs, de pruneaux et de violettes.",
     description2: "Des variétés que l'on ne trouve nulle part ailleurs, et qui font toute l'identité unique des vins de Gaillac. Chaque cépage révèle le caractère authentique de notre terroir millénaire.",
-    image: "/Page/La vigne - ok/la véraison .jpg"
+    image: "/Page/La vigne - ok/image00002.jpeg"
   },
   climat: {
     title: "Un Terroir d'Exception, Entre Ciel et Terre",
     description: "Le climat de Gaillac se situe à la croisée des influences atlantiques et méditerranéennes, offrant des étés ensoleillés et des nuits rafraîchies par les brumes du Tarn. Les sols argilo-calcaires, riches en minéraux, donnent profondeur et caractère aux raisins.",
     description2: "Ici, la nature est généreuse et contrastée. Cette région où l'on cultive l'art de vivre aussi bien que celui du vin offre un terroir vivant et vibrant.",
     description3: "Dans cette harmonie entre tradition et nature, chaque parcelle révèle son caractère unique et contribue à l'identité authentique des vins de Gaillac.",
-    image: "/PHOTOS-WEB-LASTOURS/VIGNES/Photo Manon Bessolles vignes heure bleue2.jpg"
+    image: "/Page/La vigne - ok/IMG_20230809_124834.jpg"
   },
   parcelles: [
     {
@@ -73,7 +73,7 @@ const terroirData = {
       id: "rive-gauche",
       title: "La Rive Gauche",
       description: "Sur la rive gauche, nos parcelles bénéficient des brumes matinales du Tarn qui préservent la fraîcheur des raisins. Terroir privilégié pour nos cépages blancs autochtones.",
-      image: "/Page/La vigne - ok/Palissage vigne .jpg",
+      image: "/Page/La vigne - ok/image00005.jpeg",
       superficie: "17 hectares",
       cepages: "Mauzac, Loin-de-l'œil",
       age: "30 ans"
@@ -82,7 +82,7 @@ const terroirData = {
       id: "plateau-cordais",
       title: "Le Plateau Cordais",
       description: "Le plateau cordais, avec ses sols argilo-calcaires, offre des conditions uniques pour l'expression de nos cépages. Cette diversité de terroirs contribue à la richesse de notre gamme.",
-      image: "/PHOTOS-WEB-LASTOURS/VIGNES/20230426_214346.jpg",
+      image: "/Page/La vigne - ok/image00036.jpeg",
       superficie: "17 hectares",
       cepages: "Prunelard, Mauzac",
       age: "25 ans"
@@ -92,66 +92,139 @@ const terroirData = {
 
 export default function TerroirPage() {
   return (
-    <div className="min-h-screen relative" data-page="terroir" style={{backgroundColor: '#fafaf9'}}>
+    <div className="min-h-screen relative bg-premium" data-page="terroir">
       {/* Texture grain prononcée - Style premium */}
-      <div 
-        className="fixed inset-0 opacity-12 pointer-events-none" 
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperTexture'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperTexture)' fill='%23000000'/%3E%3C/svg%3E")`,
-          backgroundSize: '120px 120px'
-        }}>
+      <div className="fixed inset-0 opacity-12 pointer-events-none texture-paper">
       </div>
       
       {/* Grain additionnel plus fin */}
-      <div 
-        className="fixed inset-0 opacity-8 pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='fineGrain'%3E%3CfeTurbulence type='turbulence' baseFrequency='2.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fineGrain)' fill='%23333333'/%3E%3C/svg%3E")`,
-          backgroundSize: '50px 50px'
-        }}>
+      <div className="fixed inset-0 opacity-8 pointer-events-none texture-grain">
       </div>
       
       {/* Gradient subtil pour la profondeur */}
       <div 
-        className="fixed inset-0 opacity-30 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.015) 70%, transparent 100%)'
-        }}>
+        className="fixed inset-0 opacity-30 pointer-events-none gradient-depth">
       </div>
 
-      {/* Hero Section - Style Ruinart */}
-      <section className="relative py-24 lg:py-40 xl:py-48 overflow-hidden z-10">
-        <div className={cn(SPACING.container, "relative z-10")}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Contenu texte hero - Style Ruinart sans carte */}
-            <div className="lg:col-span-5 order-2 lg:order-1">
-              <div className="py-12 lg:py-16">
-                <SectionTitle
-                  kicker="Le Domaine"
-                  title={terroirData.hero.title}
-                  subtitle={terroirData.hero.description}
-                  align="left"
-                />
+      {/* Hero Section Amélioré */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Image de fond avec parallax subtil */}
+        <div className="absolute inset-0">
+          <img
+            src="/Page/La vigne - ok/la véraison .jpg"
+            alt="Notre Terroir - Vignoble Château Lastours"
+            className="absolute inset-0 w-full h-full object-cover scale-105 transition-transform duration-700 hover:scale-100"
+          />
+          {/* Overlay gradients multiples pour plus de profondeur */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20" />
+          {/* Vignette subtile */}
+          <div className="absolute inset-0 vignette-radial" />
+        </div>
+        
+        <div className="relative z-10 text-center text-white max-w-6xl mx-auto px-4 space-y-8">
+          {/* Badges de certification en haut */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8 opacity-90">
+            <span className="inline-block bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 text-sm font-medium">
+              AOC Gaillac
+            </span>
+            <span className="inline-block bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 text-sm font-medium">
+              52 Hectares
+            </span>
+            <span className="inline-block bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 text-sm font-medium">
+              HVE
+            </span>
+            <span className="inline-block bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 text-sm font-medium">
+              Cépages Autochtones
+            </span>
+          </div>
+
+          {/* Titre principal amélioré */}
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <p className="text-lg md:text-xl font-light tracking-wider uppercase opacity-80 text-green-200">
+                Le Domaine
+              </p>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight">
+                Notre{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-200 to-lime-400">
+                  Terroir
+                </span>
+              </h1>
+            </div>
+            
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-light italic opacity-90 max-w-4xl mx-auto leading-relaxed">
+              Un Voyage Millénaire au Cœur du Sud-Ouest
+            </h2>
+          </div>
+
+          {/* Description enrichie */}
+          <div className="space-y-6 max-w-5xl mx-auto">
+            <p className="text-xl md:text-2xl font-light leading-relaxed opacity-95">
+              <span className="text-green-200 font-semibold">Aux confins du Sud-Ouest : Terroir d'Exception</span>
+            </p>
+            
+            <p className="text-lg md:text-xl leading-relaxed opacity-90">
+              Entre Toulouse et Albi s'étend un vignoble ancestral, vibrant d'histoire et de mémoire : 
+              le terroir de Gaillac. Ici, la vigne pousse depuis plus de deux millénaires.
+            </p>
+
+            {/* Points clés en highlight */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
+              <div className="text-center space-y-2">
+                <div className="w-12 h-12 mx-auto bg-green-400/20 rounded-full flex items-center justify-center mb-3">
+                  <span className="text-2xl">🌿</span>
+                </div>
+                <h3 className="font-semibold text-green-200">Cépages Autochtones</h3>
+                <p className="text-sm opacity-80">Mauzac, Duras, Braucol</p>
+              </div>
+              
+              <div className="text-center space-y-2">
+                <div className="w-12 h-12 mx-auto bg-green-400/20 rounded-full flex items-center justify-center mb-3">
+                  <span className="text-2xl">🏔️</span>
+                </div>
+                <h3 className="font-semibold text-green-200">Sols Argilo-Calcaires</h3>
+                <p className="text-sm opacity-80">Profondeur et caractère</p>
+              </div>
+              
+              <div className="text-center space-y-2">
+                <div className="w-12 h-12 mx-auto bg-green-400/20 rounded-full flex items-center justify-center mb-3">
+                  <span className="text-2xl">🌞</span>
+                </div>
+                <h3 className="font-semibold text-green-200">Climat Idéal</h3>
+                <p className="text-sm opacity-80">Influence atlantique et méditerranéenne</p>
               </div>
             </div>
+          </div>
 
-            {/* Image hero */}
-            <div className="lg:col-span-7 order-1 lg:order-2">
-              <div className="relative h-[450px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.01] transition-all duration-700 group">
-                <img
-                  src={terroirData.hero.image}
-                  alt="Vignoble du Château Lastours"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-stone-800/20" />
-                <div className="absolute inset-0 grain-subtle" />
+          {/* Call-to-action avec flèche de défilement */}
+          <div className="mt-12 space-y-6">
+            <TransitionLink
+              href="/reservation"
+              className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-2xl hover:shadow-green-500/20 hover:scale-105"
+            >
+              Découvrir le Vignoble
+              <span className="text-xl">→</span>
+            </TransitionLink>
+            
+            {/* Flèche de défilement animée */}
+            <div className="flex justify-center pt-8">
+              <div className="animate-bounce">
+                <svg className="w-6 h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Espace aéré après le hero - Style luxe */}
-        <div className="h-32 lg:h-48"></div>
+        {/* Indicateur de progression visuel */}
+        <div className="absolute bottom-8 left-8 hidden lg:block">
+          <div className="flex items-center space-x-4 text-white/60 text-sm">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span>Explorez nos trois terroirs</span>
+          </div>
+        </div>
       </section>
 
       {/* Citation principale */}
@@ -200,11 +273,7 @@ export default function TerroirPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
           
           {/* Grain texture */}
-          <div className="absolute inset-0 opacity-[0.03]" 
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperTexture'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperTexture)' fill='%23000000'/%3E%3C/svg%3E")`,
-              backgroundSize: '150px 150px'
-            }}>
+          <div className="absolute inset-0 opacity-[0.03] texture-grain-fine">
           </div>
 
           {/* Texte en overlay - À droite */}
@@ -245,11 +314,7 @@ export default function TerroirPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
           
           {/* Grain texture */}
-          <div className="absolute inset-0 opacity-[0.03]" 
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperTexture'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperTexture)' fill='%23000000'/%3E%3C/svg%3E")`,
-              backgroundSize: '150px 150px'
-            }}>
+          <div className="absolute inset-0 opacity-[0.03] texture-grain-fine">
           </div>
 
           {/* Texte en overlay - À gauche */}
@@ -338,7 +403,7 @@ export default function TerroirPage() {
       </section>
 
       {/* Footer local - Style Ruinart */}
-      <section className="py-40 lg:py-52 xl:py-60 relative z-10" style={{background: 'linear-gradient(to bottom, rgba(248, 248, 247, 0.8), rgba(245, 245, 244, 0.9))'}}>
+      <section className="py-40 lg:py-52 xl:py-60 relative z-10 gradient-footer-premium">
         <div className={SPACING.container}>
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center">

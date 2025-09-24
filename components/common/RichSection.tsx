@@ -93,7 +93,7 @@ export function RichSection({
                 <img
                   src={imageSrc}
                   alt={imageAlt || title}
-                  className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 grain-subtle" />
               </div>

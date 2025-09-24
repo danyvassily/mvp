@@ -24,7 +24,13 @@
     "netlify-build": "next build",
     "check-types": "tsc --noEmit",
     "prepare-netlify": "pnpm run check-types && pnpm run build",
-    "clean": "rm -rf .next out"
+    "clean": "rm -rf .next out",
+    "clean-assets": "node scripts/clean-unused-assets.js --force",
+    "clean-assets:dry": "node scripts/clean-unused-assets.js --dry-run --verbose",
+    "clean-assets:check": "node scripts/clean-unused-assets.js --dry-run",
+    "clean-aggressive": "node scripts/aggressive-clean-assets.js --force",
+    "clean-aggressive:dry": "node scripts/aggressive-clean-assets.js --dry-run --force",
+    "clean-aggressive:check": "node scripts/aggressive-clean-assets.js --dry-run"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

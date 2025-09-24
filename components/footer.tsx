@@ -27,7 +27,7 @@ export function Footer() {
 
           {/* Navigation Links */}
           <div className="lg:col-span-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center sm:text-left md:text-left">
               <div>
                 <h4 className="font-heading text-lg mb-4 text-white/90">Le Domaine</h4>
                 <nav className="flex flex-col space-y-3">
@@ -64,32 +64,32 @@ export function Footer() {
           </div>
 
           {/* Newsletter */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 text-center lg:text-left">
             <h4 className="font-heading text-lg mb-4 text-white/90">Restez informés</h4>
             <p className="text-sm text-white/70 mb-4">Actualités, primeurs et offres exclusives.</p>
-            <div className="flex space-x-2">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-2">
               <Input
                 type="email"
                 placeholder="Votre email"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:ring-wine-gold focus:border-wine-gold transition"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:ring-wine-gold focus:border-wine-gold transition flex-1"
               />
-              <Button variant="secondary" className="bg-wine-gold hover:bg-wine-gold/90 text-wine-dark font-bold">
+              <Button variant="secondary" className="bg-wine-gold hover:bg-wine-gold/90 text-wine-dark font-bold whitespace-nowrap">
                 S'inscrire
               </Button>
             </div>
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-white/20 flex flex-col md:flex-row justify-between items-center text-sm text-white/60">
-          <p className="mb-4 md:mb-0">© {new Date().getFullYear()} Châteaux Lastours. Tous droits réservés.</p>
-          <div className="flex items-center space-x-6">
+        <div className="mt-16 pt-8 border-t border-white/20 flex flex-col lg:flex-row justify-between items-center gap-6 text-sm text-white/60">
+          <p className="text-center lg:text-left">© {new Date().getFullYear()} Châteaux Lastours. Tous droits réservés.</p>
+          <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-6">
             <div className="flex space-x-4">
               <SocialLink href="#"><Facebook className="w-5 h-5" /></SocialLink>
               <SocialLink href="#"><Instagram className="w-5 h-5" /></SocialLink>
               <SocialLink href="#"><Twitter className="w-5 h-5" /></SocialLink>
               <SocialLink href="#"><Youtube className="w-5 h-5" /></SocialLink>
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4 text-center">
               <FooterLink href="/mentions-legales">Mentions Légales</FooterLink>
               <FooterLink href="/cgv">CGV</FooterLink>
             </div>
@@ -108,7 +108,7 @@ const FooterLink = ({ href, children }: { href: string; children: React.ReactNod
 )
 
 const SocialLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <Link href={href} className="hover:text-wine-gold hover:scale-110 transition-all duration-300">
+  <Link href={href} className="hover:text-wine-gold hover:scale-105 transition-all duration-300">
     {children}
   </Link>
 )

@@ -2,18 +2,21 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ChevronDown } from "lucide-react"
 import { CartSheet } from "./cart-sheet"
 import { UserMenu } from "./user-menu"
-// No GSAP for header color toggle; we use scroll listener for reliability
+import { useIsMobile } from "@/hooks/use-mobile"
 import Image from "next/image"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null)
+  const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null)
   const headerRef = useRef<HTMLHeadingElement | null>(null)
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -21,6 +24,56 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
+
+  // Fermer le menu mobile automatiquement
+  useEffect(() => {
+    // Fermer le menu quand on passe en desktop
+    if (!isMobile && isMenuOpen) {
+      setIsMenuOpen(false)
+      setMobileSubmenu(null)
+    }
+  }, [isMobile, isMenuOpen])
+
+  // Gestion des événements pour fermer le menu
+  useEffect(() => {
+    if (!isMenuOpen) return
+
+    // Bloquer le scroll du body
+    document.body.style.overflow = 'hidden'
+
+    // Fonction pour fermer le menu
+    const closeMenu = () => {
+      setIsMenuOpen(false)
+      setMobileSubmenu(null)
+    }
+
+    // Fermer avec Escape
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeMenu()
+      }
+    }
+
+    // Fermer au clic extérieur
+    const handleClickOutside = (event: Event) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        closeMenu()
+      }
+    }
+
+    // Ajouter les événements
+    document.addEventListener('keydown', handleEscape)
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('touchstart', handleClickOutside)
+
+    // Cleanup
+    return () => {
+      document.body.style.overflow = ''
+      document.removeEventListener('keydown', handleEscape)
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('touchstart', handleClickOutside)
+    }
+  }, [isMenuOpen])
 
   const clearCloseTimeout = () => {
     if (closeTimeoutRef.current) {
@@ -42,6 +95,12 @@ export function Header() {
     setHoveredMenu(key)
   }
 
+  // Fonction helper pour fermer le menu mobile
+  const closeMobileMenu = () => {
+    setIsMenuOpen(false)
+    setMobileSubmenu(null)
+  }
+
   useEffect(() => {
     return () => clearCloseTimeout()
   }, [])
@@ -60,7 +119,7 @@ export function Header() {
         <div className="flex items-center justify-between h-20 relative">
           {/* Left Navigation - Desktop */}
           <nav 
-            className="hidden lg:flex items-center space-x-8"
+            className="hidden lg:flex items-center space-x-6 xl:space-x-8 flex-1"
             onMouseLeave={scheduleMenuClose}
             onMouseEnter={clearCloseTimeout}
             onFocusCapture={clearCloseTimeout}
@@ -68,91 +127,132 @@ export function Header() {
           >
             <div className="relative">
               <button 
-                className="flex items-center space-x-1 transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
+                className="flex items-center space-x-1 transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold group py-2 cursor-pointer"
                 type="button"
-                aria-expanded={hoveredMenu === 'domaine' ? 'true' : 'false'}
                 aria-haspopup="true"
+                aria-expanded={hoveredMenu === 'domaine' ? 'true' : 'false'}
                 onMouseEnter={() => openMenu('domaine')}
                 onFocus={() => openMenu('domaine')}
-                onClick={() => openMenu('domaine')}
+                onClick={() => hoveredMenu === 'domaine' ? setHoveredMenu(null) : openMenu('domaine')}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    hoveredMenu === 'domaine' ? setHoveredMenu(null) : openMenu('domaine')
+                  }
+                  if (e.key === 'Escape') {
+                    setHoveredMenu(null)
+                  }
+                }}
               >
                 <span>Le Domaine</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${hoveredMenu === 'domaine' ? 'rotate-180' : ''}`} />
               </button>
             </div>
 
             <div className="relative">
               <button 
-                className="flex items-center space-x-1 transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
+                className="flex items-center space-x-1 transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold group py-2 cursor-pointer"
                 type="button"
-                aria-expanded={hoveredMenu === 'savoir-faire' ? 'true' : 'false'}
                 aria-haspopup="true"
+                aria-expanded={hoveredMenu === 'savoir-faire' ? 'true' : 'false'}
                 onMouseEnter={() => openMenu('savoir-faire')}
                 onFocus={() => openMenu('savoir-faire')}
-                onClick={() => openMenu('savoir-faire')}
+                onClick={() => hoveredMenu === 'savoir-faire' ? setHoveredMenu(null) : openMenu('savoir-faire')}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    hoveredMenu === 'savoir-faire' ? setHoveredMenu(null) : openMenu('savoir-faire')
+                  }
+                  if (e.key === 'Escape') {
+                    setHoveredMenu(null)
+                  }
+                }}
               >
                 <span>Savoir-Faire</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${hoveredMenu === 'savoir-faire' ? 'rotate-180' : ''}`} />
               </button>
             </div>
 
             <div className="relative">
               <button 
-                className="flex items-center space-x-1 transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
+                className="flex items-center space-x-1 transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold group py-2 cursor-pointer"
                 type="button"
-                aria-expanded={hoveredMenu === 'vins' ? 'true' : 'false'}
                 aria-haspopup="true"
+                aria-expanded={hoveredMenu === 'vins' ? 'true' : 'false'}
                 onMouseEnter={() => openMenu('vins')}
                 onFocus={() => openMenu('vins')}
-                onClick={() => openMenu('vins')}
+                onClick={() => hoveredMenu === 'vins' ? setHoveredMenu(null) : openMenu('vins')}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    hoveredMenu === 'vins' ? setHoveredMenu(null) : openMenu('vins')
+                  }
+                  if (e.key === 'Escape') {
+                    setHoveredMenu(null)
+                  }
+                }}
               >
                 <span>Nos Vins</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${hoveredMenu === 'vins' ? 'rotate-180' : ''}`} />
               </button>
             </div>
           </nav>
           
-          <div className="absolute left-1/2 -translate-x-1/2">
+          {/* Logo centré */}
+          <div className="flex-shrink-0 mx-4 lg:mx-6">
             <Link href="/" className="flex items-center">
               <Image
                 src="/PHOTOS-WEB-LASTOURS/LOGO/logo argenté.PNG"
                 alt="Château Lastours"
-                width={100}
-                height={35}
+                width={60}
+                height={50}
                 priority
-                className="transition-all duration-300 opacity-100"
+                className="transition-all duration-300 opacity-100 hover:scale-105 object-contain lg:w-[70px] lg:h-[58px]"
               />
             </Link>
           </div>
 
           {/* Right Navigation & Actions - Desktop */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-6 xl:space-x-8 flex-1 justify-end">
             <div className="relative">
               <button 
-                className="transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
+                className="flex items-center space-x-1 transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold group py-2 cursor-pointer"
                 type="button"
-                aria-expanded={hoveredMenu === 'experiences' ? 'true' : 'false'}
                 aria-haspopup="true"
+                aria-expanded={hoveredMenu === 'experiences' ? 'true' : 'false'}
                 onMouseEnter={() => openMenu('experiences')}
                 onFocus={() => openMenu('experiences')}
-                onClick={() => openMenu('experiences')}
+                onClick={() => hoveredMenu === 'experiences' ? setHoveredMenu(null) : openMenu('experiences')}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    hoveredMenu === 'experiences' ? setHoveredMenu(null) : openMenu('experiences')
+                  }
+                  if (e.key === 'Escape') {
+                    setHoveredMenu(null)
+                  }
+                }}
               >
-                Expériences
+                <span>Expériences</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${hoveredMenu === 'experiences' ? 'rotate-180' : ''}`} />
               </button>
             </div>
 
             <Link 
               href="/gastronomie" 
-              className="transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
+              className="transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold py-2"
             >
               Gastronomie
             </Link>
 
             <Link 
               href="/ou-nous-trouver" 
-              className="transition-all duration-300 text-base font-medium tracking-wide text-slate-800 hover:text-slate-600"
+              className="transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold py-2"
             >
               Contact
             </Link>
 
-            <div className="flex items-center space-x-4 ml-4">
+            <div className="flex items-center space-x-3 ml-4 border-l border-gray-200 pl-4">
               <CartSheet />
               <UserMenu />
             </div>
@@ -164,107 +264,159 @@ export function Header() {
             <UserMenu />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 text-black hover:bg-black/10 rounded-md transition-colors"
-              aria-label="Menu de navigation"
+              className="p-2 text-black hover:bg-black/10 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-wine-gold focus:ring-offset-2"
+              aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              {...(isMenuOpen ? { "aria-expanded": "true" } : { "aria-expanded": "false" })}
+              aria-controls="mobile-menu"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
+        {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-border bg-background/95 backdrop-blur-sm text-lg">
-            <nav className="flex flex-col space-y-1">
-              <Link href="/domaine/histoire" className="px-3 py-2 rounded hover:bg-accent/10">
-                Le Domaine — Histoire
-              </Link>
-              <Link href="/domaine/terroir" className="px-3 py-2 rounded hover:bg-accent/10">
-                Le Domaine — Terroir
-              </Link>
-              <Link href="/domaine/team" className="px-3 py-2 rounded hover:bg-accent/10">
-                Le Domaine — L'Équipe
-              </Link>
-              <Link href="/domaine/engagement" className="px-3 py-2 rounded hover:bg-accent/10">
-                Le Domaine — Engagement
-              </Link>
+          <div 
+            id="mobile-menu"
+            ref={mobileMenuRef}
+            className="lg:hidden py-6 border-t border-gray-200 bg-white/98 backdrop-blur-md max-h-[80vh] overflow-y-auto animate-in slide-in-from-top-2 duration-300"
+            role="navigation"
+            aria-label="Menu de navigation mobile"
+          >
+            <nav className="flex flex-col space-y-2">
+              {/* Le Domaine */}
+              <div>
+                <button
+                  onClick={() => setMobileSubmenu(mobileSubmenu === 'domaine' ? null : 'domaine')}
+                  className="flex items-center justify-between w-full px-4 py-3 text-left font-medium text-slate-800 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <span>Le Domaine</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileSubmenu === 'domaine' ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileSubmenu === 'domaine' && (
+                  <div className="ml-4 mt-2 space-y-1">
+                    <Link href="/domaine/histoire" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Notre Histoire
+                    </Link>
+                    <Link href="/domaine/terroir" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Le Terroir
+                    </Link>
+                    <Link href="/domaine/team" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      L'Équipe
+                    </Link>
+                    <Link href="/domaine/engagement" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Nos Engagements
+                    </Link>
+                  </div>
+                )}
+              </div>
 
-              <Link href="/savoir-faire/vigne" className="px-3 py-2 rounded hover:bg-accent/10">
-                Savoir‑Faire — La Vigne
-              </Link>
-              <Link href="/savoir-faire/chais" className="px-3 py-2 rounded hover:bg-accent/10">
-                Savoir‑Faire — Les Chais
-              </Link>
+              {/* Savoir-Faire */}
+              <div>
+                <button
+                  onClick={() => setMobileSubmenu(mobileSubmenu === 'savoir-faire' ? null : 'savoir-faire')}
+                  className="flex items-center justify-between w-full px-4 py-3 text-left font-medium text-slate-800 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <span>Savoir-Faire</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileSubmenu === 'savoir-faire' ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileSubmenu === 'savoir-faire' && (
+                  <div className="ml-4 mt-2 space-y-1">
+                    <Link href="/savoir-faire/vigne" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      La Vigne
+                    </Link>
+                    <Link href="/savoir-faire/chais" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Les Chais
+                    </Link>
+                    <Link href="/methode-blanche" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Méthode Ancestrale
+                    </Link>
+                  </div>
+                )}
+              </div>
 
-              <Link href="/les-vins" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Toutes les cuvées
-              </Link>
-              <Link href="/les-vins/perle" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Perle
-              </Link>
-              <Link href="/les-vins/domeni-blanc" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Domeni Blanc
-              </Link>
-              <Link href="/les-vins/opus-blanc" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Opus Blanc
-              </Link>
-              <Link href="/les-vins/methode-blanc" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Méthode Blanc
-              </Link>
-              <Link href="/les-vins/poussin-blanc" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Poussin Blanc
-              </Link>
-              <Link href="/les-vins/poussin-rose" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Poussin Rosé
-              </Link>
-              <Link href="/les-vins/domeni-rose" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Domeni Rosé
-              </Link>
-              <Link href="/les-vins/methode-rose" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Méthode Rosé
-              </Link>
-              <Link href="/les-vins/opus-rouge" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Opus Rouge
-              </Link>
-              <Link href="/les-vins/domeni-rouge" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Domeni Rouge
-              </Link>
-              <Link href="/les-vins/petrichor-rouge" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Pétrichor Rouge
-              </Link>
-              <Link href="/les-vins/claire-de-lune" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Claire de Lune
-              </Link>
-              <Link href="/les-vins/pigeonnier" className="px-3 py-2 rounded hover:bg-accent/10">
-                Nos Vins — Pigeonnier
-              </Link>
-              <Link href="/gastronomie" className="px-3 py-2 rounded hover:bg-accent/10">
-                Gastronomie
-              </Link>
-              <Link href="/reservation" className="px-3 py-2 rounded hover:bg-accent/10">
-                Réservation
-              </Link>
-              <Link href="/evenements" className="px-3 py-2 rounded hover:bg-accent/10">
-                Événements
-              </Link>
-              <Link href="/evenements/organiser" className="px-3 py-2 rounded hover:bg-accent/10">
-                Organiser un Événement
-              </Link>
-              <Link href="/club" className="px-3 py-2 rounded hover:bg-accent/10">
-                Club Lastours
-              </Link>
-              <Link href="/mecenat" className="px-3 py-2 rounded hover:bg-accent/10">
-                Mécénat
-              </Link>
+              {/* Nos Vins */}
+              <div>
+                <button
+                  onClick={() => setMobileSubmenu(mobileSubmenu === 'vins' ? null : 'vins')}
+                  className="flex items-center justify-between w-full px-4 py-3 text-left font-medium text-slate-800 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <span>Nos Vins</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileSubmenu === 'vins' ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileSubmenu === 'vins' && (
+                  <div className="ml-4 mt-2 space-y-1">
+                    <Link href="/les-vins" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors font-medium" onClick={closeMobileMenu}>
+                      Toutes les cuvées
+                    </Link>
+                    <div className="ml-2 space-y-1 border-l border-gray-200 pl-3">
+                      <p className="px-4 py-1 text-xs font-medium text-slate-500 uppercase tracking-wide">Blancs</p>
+                      <Link href="/les-vins/perle" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Perle</Link>
+                      <Link href="/les-vins/domeni-blanc" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Domeni Blanc</Link>
+                      <Link href="/les-vins/opus-blanc" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Opus Blanc</Link>
+                      <Link href="/les-vins/methode-blanc" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Méthode Blanc</Link>
+                      <Link href="/les-vins/poussin-blanc" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Poussin Blanc</Link>
+                      
+                      <p className="px-4 py-1 text-xs font-medium text-slate-500 uppercase tracking-wide mt-3">Rosés</p>
+                      <Link href="/les-vins/poussin-rose" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Poussin Rosé</Link>
+                      <Link href="/les-vins/domeni-rose" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Domeni Rosé</Link>
+                      <Link href="/les-vins/methode-rose" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Méthode Rosé</Link>
+                      
+                      <p className="px-4 py-1 text-xs font-medium text-slate-500 uppercase tracking-wide mt-3">Rouges</p>
+                      <Link href="/les-vins/opus-rouge" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Opus Rouge</Link>
+                      <Link href="/les-vins/domeni-rouge" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Domeni Rouge</Link>
+                      <Link href="/les-vins/petrichor-rouge" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Pétrichor Rouge</Link>
+                      
+                      <p className="px-4 py-1 text-xs font-medium text-slate-500 uppercase tracking-wide mt-3">Spécialités</p>
+                      <Link href="/les-vins/claire-de-lune" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Claire de Lune</Link>
+                      <Link href="/les-vins/pigeonnier" className="block px-4 py-1 text-sm text-slate-600 hover:text-wine-gold transition-colors" onClick={closeMobileMenu}>Pigeonnier</Link>
+                    </div>
+                  </div>
+                )}
+              </div>
 
-              <Link href="/actualites" className="px-3 py-2 rounded hover:bg-accent/10">
-                Actualités
-              </Link>
-              <Link href="/presse" className="px-3 py-2 rounded hover:bg-accent/10">
-                Presse
-              </Link>
-              <Link href="/ou-nous-trouver" className="px-3 py-2 rounded hover:bg-accent/10">
-                Où nous trouver
-              </Link>
+              {/* Expériences */}
+              <div>
+                <button
+                  onClick={() => setMobileSubmenu(mobileSubmenu === 'experiences' ? null : 'experiences')}
+                  className="flex items-center justify-between w-full px-4 py-3 text-left font-medium text-slate-800 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <span>Expériences</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileSubmenu === 'experiences' ? 'rotate-180' : ''}`} />
+                </button>
+                {mobileSubmenu === 'experiences' && (
+                  <div className="ml-4 mt-2 space-y-1">
+                    <Link href="/reservation" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Réserver une visite
+                    </Link>
+                    <Link href="/evenements" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Événements
+                    </Link>
+                    <Link href="/evenements/organiser" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Organiser un événement
+                    </Link>
+                    <Link href="/club" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Club Lastours
+                    </Link>
+                    <Link href="/mecenat" className="block px-4 py-2 text-sm text-slate-600 hover:text-wine-gold hover:bg-gray-50 rounded-md transition-colors" onClick={closeMobileMenu}>
+                      Mécénat
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Pages directes */}
+              <div className="border-t border-gray-200 pt-4 mt-4">
+                <Link href="/gastronomie" className="block px-4 py-3 font-medium text-slate-800 hover:text-wine-gold hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                  Gastronomie
+                </Link>
+                <Link href="/actualites" className="block px-4 py-3 font-medium text-slate-800 hover:text-wine-gold hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                  Actualités
+                </Link>
+                <Link href="/ou-nous-trouver" className="block px-4 py-3 font-medium text-slate-800 hover:text-wine-gold hover:bg-gray-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                  Contact
+                </Link>
+              </div>
             </nav>
           </div>
         )}
@@ -274,7 +426,7 @@ export function Header() {
     {/* Méga-menus style Ruinart */}
     {hoveredMenu && (
       <div 
-        className="fixed top-20 left-0 right-0 z-40 transition-all duration-500 bg-white/98 backdrop-blur-lg border-b border-gray-200/30 shadow-lg"
+        className="fixed top-20 left-0 right-0 z-50 transition-all duration-500 bg-white/98 backdrop-blur-lg border-b border-gray-200/30 shadow-lg"
         onMouseEnter={clearCloseTimeout}
         onMouseLeave={scheduleMenuClose}
         onFocusCapture={clearCloseTimeout}
@@ -290,19 +442,25 @@ export function Header() {
                 <div className="space-y-3">
                   <Link 
                     href="/domaine/histoire" 
-                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900"
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Histoire du Domaine
                   </Link>
                   <Link 
                     href="/domaine/team" 
-                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900"
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => setHoveredMenu(null)}
                   >
                     L'Équipe
                   </Link>
                   <Link 
                     href="/domaine/engagement" 
-                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900"
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Nos Engagements
                   </Link>
@@ -316,13 +474,17 @@ export function Header() {
                 <div className="space-y-3">
                   <Link 
                     href="/domaine/terroir" 
-                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900"
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Le Vignoble
                   </Link>
                   <Link 
                     href="/notre-chai" 
-                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900"
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Notre Chai
                   </Link>
@@ -336,13 +498,17 @@ export function Header() {
                 <div className="space-y-3">
                   <Link 
                     href="/actualites" 
-                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900"
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Toutes les actualités
                   </Link>
                   <Link 
                     href="/presse" 
-                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900"
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Espace Presse
                   </Link>
@@ -373,22 +539,22 @@ export function Header() {
                   Blancs
                 </h3>
                 <div className="space-y-3">
-                  <Link href="/les-vins" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Toutes les cuvées
                   </Link>
-                  <Link href="/les-vins/perle" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/perle" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Perle
                   </Link>
-                  <Link href="/les-vins/domeni-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/domeni-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Domeni Blanc
                   </Link>
-                  <Link href="/les-vins/opus-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/opus-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Opus Blanc
                   </Link>
-                  <Link href="/les-vins/methode-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/methode-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Méthode Blanc
                   </Link>
-                  <Link href="/les-vins/poussin-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/poussin-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Poussin Blanc
                   </Link>
                 </div>
@@ -399,13 +565,13 @@ export function Header() {
                   Rosés
                 </h3>
                 <div className="space-y-3">
-                  <Link href="/les-vins/poussin-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/poussin-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Poussin Rosé
                   </Link>
-                  <Link href="/les-vins/domeni-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/domeni-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Domeni Rosé
                   </Link>
-                  <Link href="/les-vins/methode-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/methode-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Méthode Rosé
                   </Link>
                 </div>
@@ -416,39 +582,44 @@ export function Header() {
                   Rouges
                 </h3>
                 <div className="space-y-3">
-                  <Link href="/les-vins/opus-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/opus-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Opus Rouge
                   </Link>
-                  <Link href="/les-vins/domeni-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/domeni-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Domeni Rouge
                   </Link>
-                  <Link href="/les-vins/petrichor-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/petrichor-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Pétrichor Rouge
                   </Link>
                 </div>
               </div>
 
               <div className="space-y-6">
-                <div className="relative h-48 bg-gradient-to-b from-slate-200 to-slate-300 rounded-lg overflow-hidden">
-                  <Image
-                    src="/photos/lastours017.jpg"
-                    alt="Nos vins"
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/30" />
-                  <div className="absolute bottom-4 left-4">
-                    <p className="text-white text-sm font-medium">Explorez toute la gamme</p>
-                  </div>
-                </div>
-
+                <h3 className="text-lg font-semibold tracking-wide mb-4 text-slate-900">
+                  Spécialités
+                </h3>
                 <div className="space-y-3">
-                  <Link href="/les-vins/claire-de-lune" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/claire-de-lune" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Claire de Lune
                   </Link>
-                  <Link href="/les-vins/pigeonnier" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900">
+                  <Link href="/les-vins/pigeonnier" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
                     Pigeonnier
                   </Link>
+                </div>
+
+                <div className="mt-8">
+                  <div className="relative h-40 bg-gradient-to-b from-slate-200 to-slate-300 rounded-lg overflow-hidden">
+                    <Image
+                      src="/photos/lastours017.jpg"
+                      alt="Nos vins"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/30" />
+                    <div className="absolute bottom-3 left-3">
+                      <p className="text-white text-xs font-medium">Explorez toute la gamme</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -457,23 +628,21 @@ export function Header() {
           {hoveredMenu === 'savoir-faire' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="space-y-6">
-                <h3 className={`text-lg font-light tracking-wide mb-4 ${scrolled ? "text-slate-900" : "text-white"}`}>
+                <h3 className="text-lg font-semibold tracking-wide mb-4 text-slate-900">
                   La Vigne
                 </h3>
                 <div className="space-y-3">
                   <Link 
                     href="/savoir-faire/vigne" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Viticulture
                   </Link>
                   <Link 
                     href="/methode-blanche" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Méthode Ancestrale
                   </Link>
@@ -481,23 +650,21 @@ export function Header() {
               </div>
 
               <div className="space-y-6">
-                <h3 className={`text-lg font-light tracking-wide mb-4 ${scrolled ? "text-slate-900" : "text-white"}`}>
+                <h3 className="text-lg font-semibold tracking-wide mb-4 text-slate-900">
                   Les Chais
                 </h3>
                 <div className="space-y-3">
                   <Link 
                     href="/savoir-faire/chais" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Vinification
                   </Link>
                   <Link 
                     href="/degustation" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Dégustation
                   </Link>
@@ -514,7 +681,7 @@ export function Header() {
                   />
                   <div className="absolute inset-0 bg-black/30" />
                   <div className="absolute bottom-4 left-4">
-                    <p className="text-white text-sm font-light">Notre savoir-faire</p>
+                    <p className="text-white text-sm font-medium">Notre savoir-faire</p>
                   </div>
                 </div>
               </div>
@@ -524,23 +691,21 @@ export function Header() {
           {hoveredMenu === 'experiences' && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div className="space-y-6">
-                <h3 className={`text-lg font-light tracking-wide mb-4 ${scrolled ? "text-slate-900" : "text-white"}`}>
+                <h3 className="text-lg font-semibold tracking-wide mb-4 text-slate-900">
                   Visites
                 </h3>
                 <div className="space-y-3">
                   <Link 
                     href="/reservation" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Réserver une visite
                   </Link>
                   <Link 
                     href="/degustation" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Dégustation
                   </Link>
@@ -548,23 +713,21 @@ export function Header() {
               </div>
 
               <div className="space-y-6">
-                <h3 className={`text-lg font-light tracking-wide mb-4 ${scrolled ? "text-slate-900" : "text-white"}`}>
+                <h3 className="text-lg font-semibold tracking-wide mb-4 text-slate-900">
                   Événements
                 </h3>
                 <div className="space-y-3">
                   <Link 
                     href="/evenements" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Nos événements
                   </Link>
                   <Link 
                     href="/evenements/organiser" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Organiser un événement
                   </Link>
@@ -572,23 +735,21 @@ export function Header() {
               </div>
 
               <div className="space-y-6">
-                <h3 className={`text-lg font-light tracking-wide mb-4 ${scrolled ? "text-slate-900" : "text-white"}`}>
+                <h3 className="text-lg font-semibold tracking-wide mb-4 text-slate-900">
                   Club & Mécénat
                 </h3>
                 <div className="space-y-3">
                   <Link 
                     href="/club" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Club Lastours
                   </Link>
                   <Link 
                     href="/mecenat" 
-                    className={`block text-sm font-light tracking-wide transition-colors ${
-                      scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/80 hover:text-white"
-                    }`}
+                    className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
+                    onClick={() => setHoveredMenu(null)}
                   >
                     Mécénat
                   </Link>
@@ -605,7 +766,7 @@ export function Header() {
                   />
                   <div className="absolute inset-0 bg-black/30" />
                   <div className="absolute bottom-4 left-4">
-                    <p className="text-white text-sm font-light">Vivez l'expérience</p>
+                    <p className="text-white text-sm font-medium">Vivez l'expérience</p>
                   </div>
                 </div>
               </div>

@@ -81,31 +81,17 @@ const histoireSections = [
 
 export default function HistoirePage() {
   return (
-    <div className="min-h-screen relative" data-page="histoire" style={{backgroundColor: '#fafaf9'}}>
+    <div className="min-h-screen relative bg-premium" data-page="histoire">
       {/* Texture grain prononcée - Style premium */}
-      <div 
-        className="fixed inset-0 opacity-12 pointer-events-none" 
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperTexture'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperTexture)' fill='%23000000'/%3E%3C/svg%3E")`,
-          backgroundSize: '120px 120px'
-        }}>
+      <div className="fixed inset-0 opacity-12 pointer-events-none texture-paper">
       </div>
       
       {/* Grain additionnel plus fin */}
-      <div 
-        className="fixed inset-0 opacity-8 pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='fineGrain'%3E%3CfeTurbulence type='turbulence' baseFrequency='2.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fineGrain)' fill='%23333333'/%3E%3C/svg%3E")`,
-          backgroundSize: '50px 50px'
-        }}>
+      <div className="fixed inset-0 opacity-8 pointer-events-none texture-grain">
       </div>
       
       {/* Gradient subtil pour la profondeur */}
-      <div 
-        className="fixed inset-0 opacity-30 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.015) 70%, transparent 100%)'
-        }}>
+      <div className="fixed inset-0 opacity-30 pointer-events-none gradient-depth">
       </div>
 
       {/* Hero Section - Style Ruinart */}
@@ -130,7 +116,7 @@ export default function HistoirePage() {
                 <img
                   src="/Page/_common/histoire-hero.jpg"
                   alt="Château Lastours - Notre Histoire"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
                   <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-stone-800/20" />
                   <div className="absolute inset-0 grain-subtle" />
@@ -160,18 +146,14 @@ export default function HistoirePage() {
             <img
               src={section.image.src}
               alt={section.image.alt}
-              className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-[3000ms]"
+              className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
             />
             
             {/* Overlay gradient subtil */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
             
             {/* Grain texture */}
-            <div className="absolute inset-0 opacity-[0.03]" 
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperTexture'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperTexture)' fill='%23000000'/%3E%3C/svg%3E")`,
-                backgroundSize: '150px 150px'
-              }}>
+            <div className="absolute inset-0 opacity-[0.03] texture-grain-fine">
             </div>
 
             {/* Texte en overlay - Position selon layout */}
@@ -200,7 +182,7 @@ export default function HistoirePage() {
       ))}
 
       {/* Footer local - Style Ruinart */}
-      <section className="py-40 lg:py-52 xl:py-60 relative z-10" style={{background: 'linear-gradient(to bottom, rgba(248, 248, 247, 0.8), rgba(245, 245, 244, 0.9))'}}>
+      <section className="py-40 lg:py-52 xl:py-60 relative z-10 gradient-footer-premium">
         <div className={SPACING.container}>
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center">

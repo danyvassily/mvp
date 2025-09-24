@@ -101,7 +101,7 @@ export function WinePageLuxe({ wine, imagePath, pdfPath }: WinePageLuxeProps) {
                 <img
                   src={imagePath}
                   alt={wine.name}
-                  className="h-[400px] lg:h-[500px] w-auto object-contain drop-shadow-2xl filter brightness-110"
+                  className="h-[400px] lg:h-[500px] w-auto object-contain drop-shadow-2xl filter brightness-110 transition-transform duration-300 hover:scale-105"
                 />
               </div>
             </div>

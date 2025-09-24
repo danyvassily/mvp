@@ -149,23 +149,24 @@ small { font-size: 0.750rem; }
 }
 
 /* Classes utilitaires personnalisées */
-.scale-130 {
-  transform: scale(1.3) !important;
+.scale-110 {
+  transform: scale(1.1);
 }
 
-/* Effet hover pour les images de vin */
-.group:hover .group-hover\:scale-130 {
-  transform: scale(1.3) !important;
+/* Effet hover pour les images de vin - Plus subtil */
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
 }
 
 /* Conteneur de bouteille spécifique */
 .wine-bottle-container {
   cursor: pointer;
+  overflow: hidden;
 }
 
 .wine-bottle-container img:hover {
-  transform: scale(1.3) !important;
-  transition: transform 0.5s ease-out;
+  transform: scale(1.05);
+  transition: transform 0.3s ease-out;
 }
 
 /* Assurer la compatibilité navigateur */
@@ -177,14 +178,56 @@ small { font-size: 0.750rem; }
 
 /* Styles pour le modal d'image de vin */
 .wine-modal-backdrop {
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .wine-modal-image {
   box-shadow: 
     0 25px 50px -12px rgba(0, 0, 0, 0.8),
     0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Classes utilitaires pour les textures */
+.texture-paper {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperTexture'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperTexture)' fill='%23000000'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+}
+
+.texture-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='fineGrain'%3E%3CfeTurbulence type='turbulence' baseFrequency='2.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fineGrain)' fill='%23333333'/%3E%3C/svg%3E");
+  background-size: 50px 50px;
+}
+
+.gradient-depth {
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.015) 70%, transparent 100%);
+}
+
+.bg-premium {
+  background-color: #fafaf9;
+}
+
+/* Classes pour les vignettes et gradients */
+.vignette-radial {
+  background: radial-gradient(circle at center, transparent 0%, transparent 70%, rgba(0,0,0,0.3) 100%);
+}
+
+.gradient-footer-premium {
+  background: linear-gradient(to bottom, rgba(248, 248, 247, 0.8), rgba(245, 245, 244, 0.9));
+}
+
+.texture-grain-fine {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperTexture'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperTexture)' fill='%23000000'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+}
+
+.texture-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-size: 100px 100px;
+}
+
+.shadow-premium-card {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 /* Effet de brillance au hover pour les bouteilles */
@@ -241,7 +284,8 @@ small { font-size: 0.750rem; }
   }
   
   /* Désactiver l'effet hover en mode réduit */
-  .group-hover\:scale-130 {
+  .group-hover\:scale-105,
+  .group-hover\:scale-110 {
     transform: none !important;
   }
 }

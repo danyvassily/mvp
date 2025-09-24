@@ -70,7 +70,7 @@ export function WinePageClient({ wine }: WinePageClientProps) {
                 <img
                   src={wine.image || "/placeholder.svg"}
                   alt={wine.name}
-                  className="h-[70vh] max-h-[720px] w-auto object-contain mx-auto transition-transform duration-500 ease-out hover:scale-130"
+                  className="h-[70vh] max-h-[720px] w-auto object-contain mx-auto transition-transform duration-300 ease-out hover:scale-105"
                   style={{
                     transformOrigin: 'center center'
                   }}

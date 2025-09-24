@@ -31,41 +31,12 @@ export default function TeamPage() {
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-display mb-6">Direction</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-              La famille de Faramond perpétue la tradition avec Hubert et son fils Louis, unis par la passion du vin
+              La famille de Faramond perpétue la tradition avec Louis, qui représente la nouvelle génération passionnée du domaine
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
-            <Card className="overflow-hidden">
-              <div className="aspect-[4/5] bg-muted">
-                <img
-                  src="/marie-lastours-portrait-winemaker.png"
-                  alt="Hubert de Faramond"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <CardContent className="p-8">
-                <h3 className="text-3xl font-display mb-2">Hubert de Faramond</h3>
-                <p className="text-accent font-medium mb-4">Propriétaire & Vigneron</p>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  Avec son frère Pierric, Hubert a donné de l'élan au développement du château durant les années 1980,
-                  multipliant la taille de l'exploitation par 2. Ils ont pris le risque d'embouteiller les bouteilles au
-                  château et de développer la vente au chai.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  Après la disparition de Pierric en 2009, Hubert continue de diriger le domaine avec passion,
-                  perpétuant l'héritage familial tout en développant la présence internationale du château.
-                </p>
-                <div className="flex gap-4">
-                  <Button variant="outline" size="sm">
-                    <Mail className="w-4 h-4 mr-2" />
-                    contact@chateau-lastours.com
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="overflow-hidden">
+          <div className="flex justify-center">
+            <Card className="overflow-hidden max-w-md">
               <div className="aspect-[4/5] bg-muted">
                 <img
                   src="/thomas-lastours-portrait-vineyard-manager.png"
@@ -77,9 +48,8 @@ export default function TeamPage() {
                 <h3 className="text-3xl font-display mb-2">Louis de Faramond</h3>
                 <p className="text-accent font-medium mb-4">Vigneron & Nouvelle Génération</p>
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  Rejoint par son père Hubert en 2013, Louis représente la nouvelle génération de la famille de
-                  Faramond. Ensemble, ils font preuve de courage et d'abnégation pour le succès que connaît aujourd'hui
-                  le château.
+                  Louis représente la nouvelle génération de la famille de Faramond. Il fait preuve de courage et 
+                  d'abnégation pour le succès que connaît aujourd'hui le château.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mb-6">
                   Louis apporte un regard moderne sur la viticulture tout en respectant les traditions familiales. Il

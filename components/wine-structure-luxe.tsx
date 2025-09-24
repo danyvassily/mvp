@@ -56,7 +56,7 @@ function WineSection({ index, item }: { index: number; item: StructureItem }) {
             <img
               src={wine?.image || "/wine-bottle-default.png"}
               alt={wine?.name || item.label}
-              className="h-[520px] max-h-[70vh] w-auto object-contain mx-auto hover:scale-105 transition-transform duration-500"
+              className="h-[520px] max-h-[70vh] w-auto object-contain mx-auto hover:scale-105 transition-transform duration-300"
             />
           </div>
         </div>

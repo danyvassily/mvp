@@ -82,7 +82,7 @@ export function WineCard({ wine }: WineCardProps) {
           onError={onImgError}
           loading="lazy"
           decoding="async"
-          className="mx-auto h-full w-[60%] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500"
+          className="mx-auto h-full w-[60%] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
         />
       </div>
       <CardContent className="p-6">

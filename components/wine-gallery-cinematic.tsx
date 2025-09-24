@@ -103,7 +103,7 @@ export function WineGalleryCinematic({ items = wines, pinned = false, heightVh =
         localCtx?.revert()
       } catch {}
     }
-  }, [])
+  }, [pinned])
 
   return (
     <div

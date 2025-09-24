@@ -14,11 +14,7 @@ export default function WinesPageSimple() {
     <div className="min-h-screen bg-white text-slate-900 relative">
       {/* Grain overlay for cinematic effect */}
       <div 
-        className="fixed inset-0 opacity-20 pointer-events-none" 
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          backgroundSize: '100px 100px'
-        }}>
+        className="fixed inset-0 opacity-20 pointer-events-none texture-noise">
       </div>
 
       {/* Hero Section with Barrels Animation */}
@@ -60,7 +56,7 @@ export default function WinesPageSimple() {
             
             {/* Gamme Doméni */}
             <PremiumCardAnimation index={0}>
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)' }}>
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30 shadow-premium-card">
                 <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"></div>
                 
                 <div className="relative grid lg:grid-cols-2 items-center">
@@ -122,7 +118,7 @@ export default function WinesPageSimple() {
             <div className="space-y-16 lg:space-y-24">
               {/* Gamme Opus */}
               <PremiumCardAnimation index={1}>
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)' }}>
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30 shadow-premium-card">
                   <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"></div>
                   
                   <div className="relative grid lg:grid-cols-2 items-center">
@@ -168,7 +164,7 @@ export default function WinesPageSimple() {
 
                {/* Gamme Méthode Traditionnelle */}
                <PremiumCardAnimation index={2}>
-                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)' }}>
+                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30 shadow-premium-card">
                    <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"></div>
                    
                    <div className="relative grid lg:grid-cols-2 items-center">
@@ -228,7 +224,7 @@ export default function WinesPageSimple() {
 
                {/* Gamme Poussin */}
                <PremiumCardAnimation index={3}>
-                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)' }}>
+                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30 shadow-premium-card">
                    <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"></div>
                    
                    <div className="relative grid lg:grid-cols-2 items-center">
@@ -282,7 +278,7 @@ export default function WinesPageSimple() {
 
                {/* Gamme Signatures */}
                <PremiumCardAnimation index={4}>
-                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)' }}>
+                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 backdrop-blur-md transition-all duration-700 group border border-gray-700/30 shadow-premium-card">
                    <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"></div>
                    
                    <div className="relative grid lg:grid-cols-2 items-center">

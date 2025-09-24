@@ -11,6 +11,9 @@ interface GammeCardProps {
 
 export function GammeCard({ gamme, isOpen, onToggle }: GammeCardProps) {
   const { title, description, accent, cover } = gamme;
+  
+  const ariaControls = `gamme-${gamme.id}-content`;
+  const ariaLabel = isOpen ? `Masquer les cuvées de la gamme ${title}` : `Voir les cuvées de la gamme ${title}`;
 
   return (
     <div className="group">
@@ -18,12 +21,9 @@ export function GammeCard({ gamme, isOpen, onToggle }: GammeCardProps) {
       <button
         onClick={onToggle}
         className="w-full text-left bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden focus:outline-none focus:ring-4 focus:ring-opacity-50"
-        style={{ 
-          // focusRingColor: accent + "30"
-        }}
         aria-expanded={isOpen}
-        aria-controls={`gamme-${gamme.id}-content`}
-        aria-label={`${isOpen ? 'Masquer' : 'Voir'} les cuvées de la gamme ${title}`}
+        aria-controls={ariaControls}
+        aria-label={ariaLabel}
       >
         <div className="relative">
           {/* Image de couverture (optionnelle) */}
@@ -33,15 +33,12 @@ export function GammeCard({ gamme, isOpen, onToggle }: GammeCardProps) {
               <img
                 src={cover}
                 alt={`Gamme ${title}`}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
               />
               {/* Overlay gradient */}
               <div 
                 className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"
-                style={{
-                  background: `linear-gradient(135deg, ${accent}15 0%, transparent 70%)`
-                }}
               />
             </div>
           )}
@@ -52,8 +49,7 @@ export function GammeCard({ gamme, isOpen, onToggle }: GammeCardProps) {
               <div className="flex-1 space-y-4">
                 {/* Titre */}
                 <h2 
-                  className="text-3xl lg:text-4xl font-display font-bold group-hover:opacity-90 transition-opacity"
-                  style={{ color: accent }}
+                  className="text-3xl lg:text-4xl font-display font-bold group-hover:opacity-90 transition-opacity text-wine-primary"
                 >
                   {title}
                 </h2>
@@ -66,21 +62,18 @@ export function GammeCard({ gamme, isOpen, onToggle }: GammeCardProps) {
                 {/* Indicateur d'action */}
                 <div className="flex items-center gap-3 pt-2">
                   <span 
-                    className="text-sm font-semibold uppercase tracking-wide"
-                    style={{ color: accent }}
+                    className="text-sm font-semibold uppercase tracking-wide text-wine-primary"
                   >
                     {isOpen ? 'Masquer les cuvées' : 'Voir les cuvées'}
                   </span>
                   <div className="flex items-center">
                     {isOpen ? (
                       <ChevronDown 
-                        className="w-5 h-5 transition-transform duration-200"
-                        style={{ color: accent }}
+                        className="w-5 h-5 transition-transform duration-200 text-wine-primary"
                       />
                     ) : (
                       <ChevronRight 
-                        className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200"
-                        style={{ color: accent }}
+                        className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200 text-wine-primary"
                       />
                     )}
                   </div>
@@ -91,12 +84,9 @@ export function GammeCard({ gamme, isOpen, onToggle }: GammeCardProps) {
 
           {/* Barre colorée en bas */}
           <div 
-            className="absolute bottom-0 left-0 right-0 h-1 transition-all duration-300"
-            style={{ 
-              backgroundColor: accent,
-              transform: isOpen ? 'scaleX(1)' : 'scaleX(0)',
-              transformOrigin: 'left'
-            }}
+            className={`absolute bottom-0 left-0 right-0 h-1 transition-all duration-300 bg-wine-primary origin-left ${
+              isOpen ? 'scale-x-100' : 'scale-x-0'
+            }`}
           />
         </div>
       </button>

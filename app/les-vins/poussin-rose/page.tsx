@@ -12,7 +12,7 @@ export default function PoussinRosePage() {
   return (
     <WinePageLuxe
       wine={wine}
-      imagePath="/Page/Page Cuvée Poussin Rosé/ROSE POUSSIN.jpg"
+      imagePath="/Page/Page Cuvée Poussin Rosé/POUSSIN ROSE.jpg"
       pdfPath="/Page/Page Cuvée Poussin Rosé/FT_poussin rosé_moelleux_2024.pdf"
     />
   )
@@ -33,7 +33,7 @@ export async function generateMetadata() {
     openGraph: {
       title: `${wine.name} ${wine.vintage} - Château Lastours`,
       description: wine.longDescription,
-      images: ["/Page/Page Cuvée Poussin Rosé/ROSE POUSSIN.jpg"],
+      images: ["/Page/Page Cuvée Poussin Rosé/POUSSIN ROSE.jpg"],
     },
   }
 }

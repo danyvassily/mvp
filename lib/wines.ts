@@ -151,7 +151,7 @@ export const gammes: Gamme[] = [
         route: "/les-vins/poussin-rose",
         pdf: getPdfPath("poussin-rose"),
         colorTag: "Rosé",
-        image: "/Page/Page Cuvée Poussin Rosé/ROSE POUSSIN.jpg"
+        image: "/Page/Page Cuvée Poussin Rosé/POUSSIN ROSE.jpg"
       }
     ]
   },

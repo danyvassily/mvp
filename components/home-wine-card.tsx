@@ -25,7 +25,7 @@ export function HomeWineCard({ wine, className }: HomeWineCardProps) {
             alt={wine.name}
             width={400}
             height={600}
-            className="mx-auto h-full w-[60%] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500 ease-out"
+            className="mx-auto h-full w-[60%] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300 ease-out"
           />
         </div>
       </Link>

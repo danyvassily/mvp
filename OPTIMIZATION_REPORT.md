@@ -127,3 +127,4 @@ Votre projet Château Lastours est maintenant **parfaitement optimisé** avec un
 *Optimisation réalisée le 24 septembre 2025*  
 *Scripts : `clean-unused-assets.js` + `aggressive-clean-assets.js`*  
 *Résultat : 2.2GB → 1.8GB (-428MB, -18.2%)*
+

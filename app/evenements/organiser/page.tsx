@@ -1,390 +1,367 @@
-"use client"
-
-import { useState } from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
-import { Calendar, Calculator } from "lucide-react"
+import { SectionHero } from "@/components/common/SectionHero"
+import { OptimizedImage } from "@/components/common/OptimizedImage"
+import { ScrollAnimation } from "@/components/gsap/ScrollAnimations"
+import Link from "next/link"
+import Image from "next/image"
+import { 
+  MapPin, 
+  Users, 
+  Calendar, 
+  Music, 
+  Wine, 
+  Utensils, 
+  Phone, 
+  Mail,
+  CheckCircle,
+  ArrowRight
+} from "lucide-react"
 
 export default function OrganiserEvenementPage() {
-  const [formData, setFormData] = useState({
-    eventType: "",
-    guestCount: "",
-    date: "",
-    duration: "",
-    services: [] as string[],
-    catering: "",
-    budget: "",
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    message: "",
-  })
-
-  const [estimatedPrice, setEstimatedPrice] = useState(0)
-
-  const eventTypes = [
-    { id: "seminaire", name: "Séminaire d'entreprise", basePrice: 45 },
-    { id: "mariage", name: "Mariage", basePrice: 85 },
-    { id: "anniversaire", name: "Anniversaire", basePrice: 35 },
-    { id: "degustation", name: "Dégustation privée", basePrice: 55 },
-    { id: "teambuilding", name: "Team Building", basePrice: 40 },
-    { id: "lancement", name: "Lancement de produit", basePrice: 65 },
-  ]
-
-  const services = [
-    { id: "visite", name: "Visite guidée du domaine", price: 8 },
-    { id: "degustation", name: "Dégustation commentée", price: 15 },
-    { id: "atelier", name: "Atelier assemblage", price: 25 },
-    { id: "animation", name: "Animation musicale", price: 300 },
-    { id: "photo", name: "Photographe professionnel", price: 450 },
-    { id: "decoration", name: "Décoration florale", price: 200 },
-  ]
-
-  const cateringOptions = [
-    { id: "cocktail", name: "Cocktail dinatoire", price: 35 },
-    { id: "buffet", name: "Buffet", price: 45 },
-    { id: "repas", name: "Repas assis", price: 65 },
-    { id: "gastronomique", name: "Menu gastronomique", price: 95 },
-  ]
-
-  const calculatePrice = () => {
-    const eventType = eventTypes.find((t) => t.id === formData.eventType)
-    const guestCount = Number.parseInt(formData.guestCount) || 0
-    const selectedServices = services.filter((s) => formData.services.includes(s.id))
-    const catering = cateringOptions.find((c) => c.id === formData.catering)
-
-    let total = 0
-    if (eventType) total += eventType.basePrice * guestCount
-    if (catering) total += catering.price * guestCount
-    selectedServices.forEach((service) => {
-      if (service.id === "animation" || service.id === "photo" || service.id === "decoration") {
-        total += service.price // Prix fixe
-      } else {
-        total += service.price * guestCount // Prix par personne
-      }
-    })
-
-    setEstimatedPrice(total)
-  }
-
-  const handleServiceChange = (serviceId: string, checked: boolean) => {
-    const newServices = checked ? [...formData.services, serviceId] : formData.services.filter((s) => s !== serviceId)
-
-    setFormData({ ...formData, services: newServices })
-  }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <SectionHero
+        title="Événements d'Exception au Château Lastours"
+        subtitle="L'Art d'Organiser au Cœur d'un Domaine Viticole Unique"
+        imageSrc="/Page/Page organiser votre événement/chateau-lastours-panoramic-view.jpg"
+        height="xl"
+        className="mt-20"
+      >
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Link href="mailto:contact@chateau-lastours.com">
+              Demandez un devis personnalisé
+              <Mail className="ml-2 w-5 h-5" />
+            </Link>
+          </Button>
+          <Button size="lg" variant="outline" asChild className="border-white text-white hover:bg-white hover:text-black">
+            <Link href="tel:+33563570709">
+              <Phone className="mr-2 w-5 h-5" />
+              05 63 57 07 09
+            </Link>
+          </Button>
+        </div>
+      </SectionHero>
 
-      <main className="pt-20">
-        {/* Hero Section */}
-        <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: "url('/private-event-organization-luxury.png')",
-            }}
-          />
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-            <h1 className="text-4xl md:text-6xl font-display mb-6 text-balance">Organiser votre Événement</h1>
-            <p className="text-xl md:text-2xl text-pretty opacity-90">
-              Créez des moments inoubliables dans notre domaine d'exception
-            </p>
-          </div>
-        </section>
-
-        {/* Simulateur de Prix */}
-        <section className="py-16 bg-background">
+      {/* Introduction */}
+      <ScrollAnimation animation="fadeIn">
+        <section className="py-24">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-display mb-6 text-foreground">Simulateur de Prix</h2>
-                <p className="text-lg text-muted-foreground">
-                  Configurez votre événement et obtenez une estimation instantanée
+              <div className="text-center mb-16">
+                <p className="text-xl leading-relaxed text-muted-foreground text-pretty max-w-4xl mx-auto">
+                  Situé dans la prestigieuse région viticole de Gaillac, le Château Lastours vous invite à transformer 
+                  vos événements en souvenirs inoubliables, mêlant charme, raffinement et authenticité. Que vous 
+                  planifiiez un mariage, un séminaire d'entreprise ou une soirée d'été, notre domaine conjugue 
+                  élégance à la française et son accueil chaleureux.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+      </ScrollAnimation>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Formulaire */}
-                <div className="lg:col-span-2 space-y-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Calendar className="w-5 h-5" />
-                        Détails de l'Événement
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="eventType">Type d'événement</Label>
-                          <Select
-                            value={formData.eventType}
-                            onValueChange={(value) => setFormData({ ...formData, eventType: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Sélectionnez le type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {eventTypes.map((type) => (
-                                <SelectItem key={type.id} value={type.id}>
-                                  {type.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label htmlFor="guestCount">Nombre d'invités</Label>
-                          <Input
-                            id="guestCount"
-                            type="number"
-                            placeholder="Ex: 50"
-                            value={formData.guestCount}
-                            onChange={(e) => setFormData({ ...formData, guestCount: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="date">Date souhaitée</Label>
-                          <Input
-                            id="date"
-                            type="date"
-                            value={formData.date}
-                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="duration">Durée</Label>
-                          <Select
-                            value={formData.duration}
-                            onValueChange={(value) => setFormData({ ...formData, duration: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Durée de l'événement" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="2h">2 heures</SelectItem>
-                              <SelectItem value="4h">4 heures</SelectItem>
-                              <SelectItem value="journee">Journée complète</SelectItem>
-                              <SelectItem value="weekend">Week-end</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+      {/* Trois Espaces d'Exception */}
+      <section className="py-24 bg-muted/30">
+        <div className="container mx-auto px-4 lg:px-8">
+          <ScrollAnimation animation="fadeIn">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-display mb-6">Trois Espaces d'Exception</h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto text-pretty">
+                Adaptés à vos besoins, nos espaces offrent un cadre unique pour tous vos événements
+              </p>
+            </div>
+          </ScrollAnimation>
 
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Services Additionnels</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {services.map((service) => (
-                          <div key={service.id} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={service.id}
-                              checked={formData.services.includes(service.id)}
-                              onCheckedChange={(checked) => handleServiceChange(service.id, checked as boolean)}
-                            />
-                            <Label htmlFor={service.id} className="flex-1">
-                              {service.name}
-                              <span className="text-muted-foreground ml-2">
-                                {service.price < 100 ? `+${service.price}€/pers` : `+${service.price}€`}
-                              </span>
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Restauration</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {cateringOptions.map((option) => (
-                          <div key={option.id} className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              id={option.id}
-                              name="catering"
-                              value={option.id}
-                              checked={formData.catering === option.id}
-                              onChange={(e) => setFormData({ ...formData, catering: e.target.value })}
-                              className="w-4 h-4"
-                            />
-                            <Label htmlFor={option.id} className="flex-1">
-                              {option.name}
-                              <span className="text-muted-foreground ml-2">+{option.price}€/pers</span>
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+          <div className="max-w-4xl mx-auto space-y-12">
+            {/* La Tente Nomade */}
+            <ScrollAnimation animation="fadeIn" index={0}>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-display text-foreground">La Tente Nomade</h3>
+                    <p className="text-accent font-medium">Un écrin champêtre de 375m²</p>
+                  </div>
                 </div>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Au cœur des jardins à la française et des vignes centenaires, cet espace éphémère, 
+                  élégamment éclairé et sonorisé, offre une ambiance bucolique et sophistiquée. 
+                  Parfait pour des mariages romantiques, des team building inspirants ou des soirées 
+                  estivales conviviales baignées de lumière naturelle.
+                </p>
+              </div>
+            </ScrollAnimation>
 
-                {/* Estimation */}
+            {/* Salle de Réception */}
+            <ScrollAnimation animation="fadeIn" index={1}>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-700 rounded-full flex items-center justify-center">
+                    <Wine className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-display text-foreground">La Salle de Réception</h3>
+                    <p className="text-accent font-medium">Charme historique et confort moderne</p>
+                  </div>
+                </div>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Située dans l'ancien chai à barriques, cette salle climatisée de 100m² allie charme 
+                  intemporel et élégance contemporaine. Idéale pour galas, réceptions privées et 
+                  cocktails professionnels, avec un service sur mesure.
+                </p>
+              </div>
+            </ScrollAnimation>
+
+            {/* Salle de Réunion */}
+            <ScrollAnimation animation="fadeIn" index={2}>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
+                    <Calendar className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-display text-foreground">La Salle de Réunion</h3>
+                    <p className="text-accent font-medium">Un havre lumineux pour la créativité</p>
+                  </div>
+                </div>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  À l'étage, équipée d'un vidéoprojecteur et d'un éclairage modulable, cet espace 
+                  raffiné invite à la concentration et à la collaboration, parfait pour séminaires, 
+                  conférences et ateliers.
+                </p>
+              </div>
+            </ScrollAnimation>
+          </div>
+        </div>
+      </section>
+
+      {/* Accompagnement Personnalisé */}
+      <ScrollAnimation animation="fadeIn">
+        <section className="py-24">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6">
-                  <Card className="sticky top-24">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Calculator className="w-5 h-5" />
-                        Estimation
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="text-center">
-                        <div className="text-3xl font-display text-accent mb-2">{estimatedPrice.toLocaleString()}€</div>
-                        <p className="text-sm text-muted-foreground">Prix estimé TTC</p>
-                      </div>
+                  <h2 className="text-4xl md:text-5xl font-display mb-6">Un Accompagnement Personnalisé</h2>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Au Château Lastours, chaque événement est une création unique. Nos expertes, 
+                    <strong className="text-foreground"> Mathilde et Fanny</strong>, anticipent vos besoins pour orchestrer 
+                    une expérience alliant excellence, chaleur et authenticité.
+                  </p>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Invitez vos convives à s'immerger dans l'âme de notre vignoble et à partager des moments 
+                    d'exception au cœur du Sud-Ouest.
+                  </p>
+                  <div className="flex flex-wrap gap-4 pt-4">
+                    <div className="flex items-center gap-2 text-accent">
+                      <CheckCircle className="w-5 h-5" />
+                      <span className="text-sm font-medium">Service sur-mesure</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-accent">
+                      <CheckCircle className="w-5 h-5" />
+                      <span className="text-sm font-medium">Expertise locale</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-accent">
+                      <CheckCircle className="w-5 h-5" />
+                      <span className="text-sm font-medium">Accompagnement complet</span>
+                    </div>
+                  </div>
+                </div>
+                <OptimizedImage
+                  src="/Page/Page organiser votre événement/accompagnement-personnalise.jpg"
+                  alt="Accompagnement personnalisé Château Lastours"
+                  fill
+                  containerClassName="h-96 lg:h-[500px] rounded-lg shadow-2xl"
+                  className="hover:scale-105 transition-transform duration-700"
+                  aspectRatio="landscape"
+                  objectFit="cover"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </ScrollAnimation>
 
-                      <Button onClick={calculatePrice} className="w-full bg-transparent" variant="outline">
-                        <Calculator className="w-4 h-4 mr-2" />
-                        Calculer le Prix
-                      </Button>
+      {/* Activités Œnotouristiques */}
+      <section className="py-24 bg-muted/30">
+        <div className="container mx-auto px-4 lg:px-8">
+          <ScrollAnimation animation="fadeIn">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-display mb-6">Activités Œnotouristiques Uniques</h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto text-pretty">
+                Enchantez vos invités avec des expériences immersives au cœur de notre vignoble
+              </p>
+            </div>
+          </ScrollAnimation>
 
-                      {estimatedPrice > 0 && (
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between">
-                            <span>Base événement:</span>
-                            <span>
-                              {formData.guestCount
-                                ? (eventTypes.find((t) => t.id === formData.eventType)?.basePrice || 0) *
-                                  Number.parseInt(formData.guestCount)
-                                : 0}
-                              €
-                            </span>
-                          </div>
-                          {formData.catering && (
-                            <div className="flex justify-between">
-                              <span>Restauration:</span>
-                              <span>
-                                {formData.guestCount
-                                  ? (cateringOptions.find((c) => c.id === formData.catering)?.price || 0) *
-                                    Number.parseInt(formData.guestCount)
-                                  : 0}
-                                €
-                              </span>
-                            </div>
-                          )}
-                          {formData.services.length > 0 && (
-                            <div className="flex justify-between">
-                              <span>Services:</span>
-                              <span>
-                                {services
-                                  .filter((s) => formData.services.includes(s.id))
-                                  .reduce((total, service) => {
-                                    if (service.price < 100) {
-                                      return total + service.price * (Number.parseInt(formData.guestCount) || 0)
-                                    }
-                                    return total + service.price
-                                  }, 0)}
-                                €
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      )}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <ScrollAnimation animation="slideUp" index={0}>
+              <div className="text-center h-full p-8 bg-background rounded-lg border hover:shadow-lg transition-all duration-300">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Users className="w-10 h-10 text-white" />
+                </div>
+                <h3 className="text-xl font-display mb-4">Yoga & Vins</h3>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Éveillez corps et esprit dans une expérience unique alliant yoga et dégustation.
+                </p>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="https://www.gaillacvisit.fr/activités-tarn/yoga-et-vin/">
+                    En savoir plus
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            </ScrollAnimation>
 
-                      <div className="pt-4 border-t">
-                        <Badge variant="secondary" className="w-full justify-center">
-                          Devis personnalisé gratuit
-                        </Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
+            <ScrollAnimation animation="slideUp" index={1}>
+              <div className="text-center h-full p-8 bg-background rounded-lg border hover:shadow-lg transition-all duration-300">
+                <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <MapPin className="w-10 h-10 text-white" />
+                </div>
+                <h3 className="text-xl font-display mb-4">Escape Game Challenge Vigneron</h3>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Une aventure immersive pour découvrir les secrets du vignoble.
+                </p>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="https://www.gaillacvisit.fr/escape-game/">
+                    Découvrez
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            </ScrollAnimation>
+
+            <ScrollAnimation animation="slideUp" index={2}>
+              <div className="text-center h-full p-8 bg-background rounded-lg border hover:shadow-lg transition-all duration-300">
+                <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-amber-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Wine className="w-10 h-10 text-white" />
+                </div>
+                <h3 className="text-xl font-display mb-4">Atelier Œnologique</h3>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Une exploration guidée de l'art de la dégustation, menée par des œnologues passionnés.
+                </p>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="https://www.gaillacvisit.fr/atelier-oenologique/">
+                    Plus d'informations
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            </ScrollAnimation>
+          </div>
+        </div>
+      </section>
+
+      {/* Apéro-concerts d'été */}
+      <ScrollAnimation animation="fadeIn">
+        <section className="py-24">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl md:text-5xl font-display mb-6">Apéro-concerts d'Été</h2>
+                <h3 className="text-2xl font-display text-accent mb-8">Célébrez avec Élégance</h3>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <div className="order-2 lg:order-1 space-y-6">
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Chaque été, le domaine s'anime pour deux soirées festives mêlant musique live, 
+                    gastronomie locale et vins d'exception.
+                  </p>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Réservez vos dates pour <strong className="text-foreground">juin [à confirmer]</strong> et 
+                    <strong className="text-foreground"> août [à confirmer] 2025</strong> et partagez des moments 
+                    authentiques dans un cadre enchanteur.
+                  </p>
+                  <div className="flex flex-wrap gap-4 pt-4">
+                    <div className="flex items-center gap-2 text-accent">
+                      <Music className="w-5 h-5" />
+                      <span className="text-sm font-medium">Musique live</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-accent">
+                      <Utensils className="w-5 h-5" />
+                      <span className="text-sm font-medium">Gastronomie locale</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-accent">
+                      <Wine className="w-5 h-5" />
+                      <span className="text-sm font-medium">Vins d'exception</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="order-1 lg:order-2">
+                  <OptimizedImage
+                    src="/Page/Page organiser votre événement/apero-concerts-ete.jpg"
+                    alt="Apéro-concerts d'été au Château Lastours"
+                    fill
+                    containerClassName="h-96 lg:h-[500px] rounded-lg shadow-2xl"
+                    className="hover:scale-105 transition-transform duration-700"
+                    aspectRatio="landscape"
+                    objectFit="cover"
+                  />
                 </div>
               </div>
             </div>
           </div>
         </section>
+      </ScrollAnimation>
 
-        {/* Formulaire de Contact */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-center">Demande de Devis Personnalisé</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="name">Nom complet *</Label>
-                        <Input
-                          id="name"
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="email">Email *</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="phone">Téléphone</Label>
-                        <Input
-                          id="phone"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="company">Entreprise</Label>
-                        <Input
-                          id="company"
-                          value={formData.company}
-                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="message">Message</Label>
-                      <Textarea
-                        id="message"
-                        rows={4}
-                        placeholder="Décrivez votre projet d'événement..."
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      />
-                    </div>
-                    <Button type="submit" size="lg" className="w-full">
-                      Envoyer la Demande de Devis
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
+      {/* Contact & CTA */}
+      <ScrollAnimation animation="scale">
+        <section className="py-24 relative overflow-hidden">
+          <div className="absolute inset-0">
+            <Image
+              src="/Page/Page organiser votre événement/chateau-lastours-contact-background.jpg"
+              alt="Contactez Château Lastours"
+              fill
+              className="object-cover object-center"
+              priority
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-black/60" />
+          </div>
+          
+          <div className="container mx-auto px-4 lg:px-8 relative z-10">
+            <div className="text-center text-white max-w-4xl mx-auto">
+              <h2 className="text-4xl md:text-6xl font-display mb-6">Contactez-nous pour Créer votre Événement d'Exception</h2>
+              <p className="text-xl md:text-2xl mb-8 opacity-90">
+                Prêt à organiser un événement inoubliable ? Contactez-nous dès maintenant pour un devis personnalisé.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+                <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-4 text-lg">
+                  <Link href="mailto:contact@chateau-lastours.com">
+                    <Mail className="mr-2 w-6 h-6" />
+                    contact@chateau-lastours.com
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild className="border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg">
+                  <Link href="tel:+33563570709">
+                    <Phone className="mr-2 w-6 h-6" />
+                    +33 (0)5 63 57 07 09
+                  </Link>
+                </Button>
+              </div>
+
+              <div className="text-center">
+                <p className="text-lg opacity-80 mb-4">
+                  <Link 
+                    href="https://www.gaillacvisit.fr/contact-renseignements/" 
+                    className="hover:text-accent transition-colors underline"
+                  >
+                    Contactez-nous pour une assistance personnalisée et un devis adapté
+                  </Link>
+                </p>
+              </div>
             </div>
           </div>
         </section>
-      </main>
+      </ScrollAnimation>
 
     </div>
   )

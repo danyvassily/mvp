@@ -12,7 +12,10 @@ export default function PressePage() {
       <main className="pt-20">
         {/* Hero */}
         <section className="relative h-[40vh] flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/wine-estate-owner-portrait.png')" }} />
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('/wine-estate-owner-portrait.png')" }}
+          />
           <div className="absolute inset-0 bg-black/50" />
           <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
             <h1 className="text-4xl md:text-6xl font-display mb-4">Espace Presse</h1>
@@ -29,13 +32,13 @@ export default function PressePage() {
                   <h2 className="text-2xl font-display">Logos officiels</h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
                     <div className="relative aspect-square bg-muted rounded">
-                      <Image src="/logo-chateau-lastours.png" alt="Logo Château Lastours" fill className="object-contain p-4" />
+                      <Image src="/PHOTOS-WEB-LASTOURS/LOGO/logo-chateau-lastours.jpg" alt="Logo Château Lastours" fill className="object-contain p-4" />
                     </div>
                   </div>
                   <div>
                     <Button asChild variant="outline">
-                      <Link href="/logo-chateau-lastours.png" download>
-                        Télécharger le logo (PNG)
+                      <Link href="/PHOTOS-WEB-LASTOURS/LOGO/logo-chateau-lastours.jpg" download>
+                        Télécharger le logo (JPG)
                       </Link>
                     </Button>
                   </div>

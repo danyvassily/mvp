@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { LazyImage } from "./LazyImage"
 import { cn } from "@/lib/utils"
 
 interface SectionHeroProps {
@@ -39,26 +40,20 @@ export function SectionHero({
     )}>
       {/* Image de fond */}
       <div className="absolute inset-0">
-        {imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={title}
-            className="w-full h-full object-cover object-center"
-            onError={(e) => {
-              // Fallback vers l'image par défaut en cas d'erreur
-              const target = e.target as HTMLImageElement
-              target.src = fallbackImage
-            }}
-          />
-        ) : (
-          <Image
-            src={fallbackImage}
-            alt={title}
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        )}
+        <LazyImage
+          src={imageSrc || fallbackImage}
+          alt={title}
+          containerClassName="w-full h-full"
+          className="w-full h-full"
+          objectFit="cover"
+          objectPosition="center"
+          fallbackSrc={fallbackImage}
+          placeholder={
+            <div className="absolute inset-0 bg-gradient-to-br from-muted via-muted/80 to-muted">
+              <div className="absolute inset-0 grain-subtle opacity-20" />
+            </div>
+          }
+        />
       </div>
 
       {/* Grain effect */}

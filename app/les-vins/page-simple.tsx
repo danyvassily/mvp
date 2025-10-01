@@ -29,7 +29,7 @@ export default function WinesPageSimple() {
             
             {/* Gamme Doméni */}
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 p-8 lg:p-10">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ color: "#D4AF37" }}>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-yellow-600">
                 Doméni
               </h2>
               <p className="text-lg lg:text-xl text-gray-600 leading-relaxed mb-6">
@@ -80,7 +80,7 @@ export default function WinesPageSimple() {
 
             {/* Gamme Opus */}
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 p-8 lg:p-10">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ color: "#8B4513" }}>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-amber-800">
                 Opus
               </h2>
               <p className="text-lg lg:text-xl text-gray-600 leading-relaxed mb-6">
@@ -118,7 +118,7 @@ export default function WinesPageSimple() {
 
             {/* Autres gammes en version simplifiée */}
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 p-8 lg:p-10">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ color: "#4A90E2" }}>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-blue-600">
                 Méthode Traditionnelle
               </h2>
               <p className="text-lg lg:text-xl text-gray-600 leading-relaxed mb-6">
@@ -138,7 +138,7 @@ export default function WinesPageSimple() {
             </div>
 
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 p-8 lg:p-10">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ color: "#50C878" }}>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-green-600">
                 Poussin
               </h2>
               <p className="text-lg lg:text-xl text-gray-600 leading-relaxed mb-6">
@@ -155,7 +155,7 @@ export default function WinesPageSimple() {
             </div>
 
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 p-8 lg:p-10">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ color: "#9370DB" }}>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-purple-600">
                 Signatures
               </h2>
               <p className="text-lg lg:text-xl text-gray-600 leading-relaxed mb-6">

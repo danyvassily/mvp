@@ -1,10 +1,9 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import type { FocusEvent, MouseEvent } from "react"
 import Link from "next/link"
 import { Menu, X, ChevronDown } from "lucide-react"
-import { CartSheet } from "./cart-sheet"
-import { UserMenu } from "./user-menu"
 import { useIsMobile } from "@/hooks/use-mobile"
 import Image from "next/image"
 
@@ -12,17 +11,28 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null)
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null)
-  const headerRef = useRef<HTMLHeadingElement | null>(null)
+  const headerRef = useRef<HTMLElement | null>(null)
+  const navRef = useRef<HTMLDivElement | null>(null)
+  const megaMenuRef = useRef<HTMLDivElement | null>(null)
   const mobileMenuRef = useRef<HTMLDivElement | null>(null)
   const [scrolled, setScrolled] = useState(false)
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isMobile = useIsMobile()
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  // Nettoyage des timeouts au démontage du composant
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
+    }
   }, [])
 
   // Fermer le menu mobile automatiquement
@@ -75,24 +85,31 @@ export function Header() {
     }
   }, [isMenuOpen])
 
-  const clearCloseTimeout = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current)
-      closeTimeoutRef.current = null
-    }
-  }
-
-  const scheduleMenuClose = () => {
-    clearCloseTimeout()
-    closeTimeoutRef.current = setTimeout(() => {
-      setHoveredMenu(null)
-      closeTimeoutRef.current = null
-    }, 150)
-  }
-
   const openMenu = (key: string) => {
-    clearCloseTimeout()
+    // Annuler tout timeout de fermeture en cours
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
     setHoveredMenu(key)
+  }
+
+  const closeMenuWithDelay = (delay: number = 150) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+    }
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoveredMenu(null)
+      hoverTimeoutRef.current = null
+    }, delay)
+  }
+
+  const closeMenuImmediately = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
+    setHoveredMenu(null)
   }
 
   // Fonction helper pour fermer le menu mobile
@@ -101,14 +118,62 @@ export function Header() {
     setMobileSubmenu(null)
   }
 
-  useEffect(() => {
-    return () => clearCloseTimeout()
-  }, [])
+  const handleNavMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
+    const nextTarget = event.relatedTarget as Node | null
+    // Si on va vers le mega-menu, ne pas fermer
+    if (nextTarget && megaMenuRef.current?.contains(nextTarget)) {
+      return
+    }
+    // Fermer avec un délai pour permettre la transition vers le mega-menu
+    closeMenuWithDelay(100)
+  }
+
+  const handleMegaMenuMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
+    const nextTarget = event.relatedTarget as Node | null
+    // Si on retourne vers la navigation, ne pas fermer
+    if (nextTarget && navRef.current?.contains(nextTarget)) {
+      return
+    }
+    // Fermer immédiatement si on quitte complètement la zone
+    closeMenuWithDelay(50)
+  }
+
+  const handleMenuMouseEnter = () => {
+    // Annuler la fermeture si on revient sur le menu
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
+  }
+
+  const handleTriggerBlur = (event: FocusEvent<HTMLButtonElement>) => {
+    const nextTarget = event.relatedTarget as Node | null
+    if (!nextTarget) {
+      closeMenuWithDelay(200)
+      return
+    }
+
+    if (navRef.current?.contains(nextTarget) || megaMenuRef.current?.contains(nextTarget)) {
+      return
+    }
+
+    closeMenuWithDelay(200)
+  }
+
+  const handleMegaMenuBlur = (event: FocusEvent<HTMLDivElement>) => {
+    const nextTarget = event.relatedTarget as Node | null
+
+    if (nextTarget && (megaMenuRef.current?.contains(nextTarget) || navRef.current?.contains(nextTarget))) {
+      return
+    }
+
+    closeMenuWithDelay(200)
+  }
 
   return (
     <>
       <header
-        ref={headerRef as any}
+        ref={headerRef}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
           scrolled 
             ? "bg-white/98 backdrop-blur-md border-b border-gray-200/50 shadow-lg" 
@@ -119,28 +184,27 @@ export function Header() {
         <div className="flex items-center justify-between h-20 relative">
           {/* Left Navigation - Desktop */}
           <nav 
+            ref={navRef}
             className="hidden lg:flex items-center space-x-6 xl:space-x-8 flex-1"
-            onMouseLeave={scheduleMenuClose}
-            onMouseEnter={clearCloseTimeout}
-            onFocusCapture={clearCloseTimeout}
-            onBlurCapture={scheduleMenuClose}
+            onMouseLeave={handleNavMouseLeave}
           >
             <div className="relative">
               <button 
                 className="flex items-center space-x-1 transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold group py-2 cursor-pointer"
                 type="button"
                 aria-haspopup="true"
-                aria-expanded={hoveredMenu === 'domaine' ? 'true' : 'false'}
+                {...(hoveredMenu === 'domaine' ? { "aria-expanded": "true" } : { "aria-expanded": "false" })}
                 onMouseEnter={() => openMenu('domaine')}
                 onFocus={() => openMenu('domaine')}
-                onClick={() => hoveredMenu === 'domaine' ? setHoveredMenu(null) : openMenu('domaine')}
+                onClick={() => hoveredMenu === 'domaine' ? closeMenuImmediately() : openMenu('domaine')}
+                onBlur={handleTriggerBlur}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
-                    hoveredMenu === 'domaine' ? setHoveredMenu(null) : openMenu('domaine')
+                    hoveredMenu === 'domaine' ? closeMenuImmediately() : openMenu('domaine')
                   }
                   if (e.key === 'Escape') {
-                    setHoveredMenu(null)
+                    closeMenuImmediately()
                   }
                 }}
               >
@@ -154,17 +218,18 @@ export function Header() {
                 className="flex items-center space-x-1 transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold group py-2 cursor-pointer"
                 type="button"
                 aria-haspopup="true"
-                aria-expanded={hoveredMenu === 'savoir-faire' ? 'true' : 'false'}
+                {...(hoveredMenu === 'savoir-faire' ? { "aria-expanded": "true" } : { "aria-expanded": "false" })}
                 onMouseEnter={() => openMenu('savoir-faire')}
                 onFocus={() => openMenu('savoir-faire')}
-                onClick={() => hoveredMenu === 'savoir-faire' ? setHoveredMenu(null) : openMenu('savoir-faire')}
+                onClick={() => hoveredMenu === 'savoir-faire' ? closeMenuImmediately() : openMenu('savoir-faire')}
+                onBlur={handleTriggerBlur}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
-                    hoveredMenu === 'savoir-faire' ? setHoveredMenu(null) : openMenu('savoir-faire')
+                    hoveredMenu === 'savoir-faire' ? closeMenuImmediately() : openMenu('savoir-faire')
                   }
                   if (e.key === 'Escape') {
-                    setHoveredMenu(null)
+                    closeMenuImmediately()
                   }
                 }}
               >
@@ -178,17 +243,18 @@ export function Header() {
                 className="flex items-center space-x-1 transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold group py-2 cursor-pointer"
                 type="button"
                 aria-haspopup="true"
-                aria-expanded={hoveredMenu === 'vins' ? 'true' : 'false'}
+                {...(hoveredMenu === 'vins' ? { "aria-expanded": "true" } : { "aria-expanded": "false" })}
                 onMouseEnter={() => openMenu('vins')}
                 onFocus={() => openMenu('vins')}
-                onClick={() => hoveredMenu === 'vins' ? setHoveredMenu(null) : openMenu('vins')}
+                onClick={() => hoveredMenu === 'vins' ? closeMenuImmediately() : openMenu('vins')}
+                onBlur={handleTriggerBlur}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
-                    hoveredMenu === 'vins' ? setHoveredMenu(null) : openMenu('vins')
+                    hoveredMenu === 'vins' ? closeMenuImmediately() : openMenu('vins')
                   }
                   if (e.key === 'Escape') {
-                    setHoveredMenu(null)
+                    closeMenuImmediately()
                   }
                 }}
               >
@@ -202,7 +268,7 @@ export function Header() {
           <div className="flex-shrink-0 mx-4 lg:mx-6">
             <Link href="/" className="flex items-center">
               <Image
-                src="/PHOTOS-WEB-LASTOURS/LOGO/logo argenté.PNG"
+                src="/PHOTOS-WEB-LASTOURS/LOGO/logo-chateau-lastours.jpg"
                 alt="Château Lastours"
                 width={60}
                 height={50}
@@ -219,17 +285,18 @@ export function Header() {
                 className="flex items-center space-x-1 transition-all duration-300 text-sm xl:text-base font-medium tracking-wide text-slate-800 hover:text-wine-gold group py-2 cursor-pointer"
                 type="button"
                 aria-haspopup="true"
-                aria-expanded={hoveredMenu === 'experiences' ? 'true' : 'false'}
+                {...(hoveredMenu === 'experiences' ? { "aria-expanded": "true" } : { "aria-expanded": "false" })}
                 onMouseEnter={() => openMenu('experiences')}
                 onFocus={() => openMenu('experiences')}
-                onClick={() => hoveredMenu === 'experiences' ? setHoveredMenu(null) : openMenu('experiences')}
+                onClick={() => hoveredMenu === 'experiences' ? closeMenuImmediately() : openMenu('experiences')}
+                onBlur={handleTriggerBlur}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
-                    hoveredMenu === 'experiences' ? setHoveredMenu(null) : openMenu('experiences')
+                    hoveredMenu === 'experiences' ? closeMenuImmediately() : openMenu('experiences')
                   }
                   if (e.key === 'Escape') {
-                    setHoveredMenu(null)
+                    closeMenuImmediately()
                   }
                 }}
               >
@@ -252,16 +319,10 @@ export function Header() {
               Contact
             </Link>
 
-            <div className="flex items-center space-x-3 ml-4 border-l border-gray-200 pl-4">
-              <CartSheet />
-              <UserMenu />
-            </div>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center space-x-2">
-            <CartSheet />
-            <UserMenu />
+          <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 text-black hover:bg-black/10 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-wine-gold focus:ring-offset-2"
@@ -426,11 +487,11 @@ export function Header() {
     {/* Méga-menus style Ruinart */}
     {hoveredMenu && (
       <div 
+        ref={megaMenuRef}
         className="fixed top-20 left-0 right-0 z-50 transition-all duration-500 bg-white/98 backdrop-blur-lg border-b border-gray-200/30 shadow-lg"
-        onMouseEnter={clearCloseTimeout}
-        onMouseLeave={scheduleMenuClose}
-        onFocusCapture={clearCloseTimeout}
-        onBlurCapture={scheduleMenuClose}
+        onMouseEnter={handleMenuMouseEnter}
+        onMouseLeave={handleMegaMenuMouseLeave}
+        onBlurCapture={handleMegaMenuBlur}
       >
         <div className="container mx-auto px-4 lg:px-8 py-12">
           {hoveredMenu === 'domaine' && (
@@ -443,24 +504,21 @@ export function Header() {
                   <Link 
                     href="/domaine/histoire" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Histoire du Domaine
                   </Link>
                   <Link 
                     href="/domaine/team" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     L'Équipe
                   </Link>
                   <Link 
                     href="/domaine/engagement" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Nos Engagements
                   </Link>
@@ -475,16 +533,14 @@ export function Header() {
                   <Link 
                     href="/domaine/terroir" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Le Vignoble
                   </Link>
                   <Link 
                     href="/notre-chai" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Notre Chai
                   </Link>
@@ -499,16 +555,14 @@ export function Header() {
                   <Link 
                     href="/actualites" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Toutes les actualités
                   </Link>
                   <Link 
                     href="/presse" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Espace Presse
                   </Link>
@@ -539,22 +593,22 @@ export function Header() {
                   Blancs
                 </h3>
                 <div className="space-y-3">
-                  <Link href="/les-vins" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Toutes les cuvées
                   </Link>
-                  <Link href="/les-vins/perle" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/perle" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Perle
                   </Link>
-                  <Link href="/les-vins/domeni-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/domeni-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Domeni Blanc
                   </Link>
-                  <Link href="/les-vins/opus-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/opus-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Opus Blanc
                   </Link>
-                  <Link href="/les-vins/methode-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/methode-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Méthode Blanc
                   </Link>
-                  <Link href="/les-vins/poussin-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/poussin-blanc" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Poussin Blanc
                   </Link>
                 </div>
@@ -565,13 +619,13 @@ export function Header() {
                   Rosés
                 </h3>
                 <div className="space-y-3">
-                  <Link href="/les-vins/poussin-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/poussin-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Poussin Rosé
                   </Link>
-                  <Link href="/les-vins/domeni-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/domeni-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Domeni Rosé
                   </Link>
-                  <Link href="/les-vins/methode-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/methode-rose" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Méthode Rosé
                   </Link>
                 </div>
@@ -582,13 +636,13 @@ export function Header() {
                   Rouges
                 </h3>
                 <div className="space-y-3">
-                  <Link href="/les-vins/opus-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/opus-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Opus Rouge
                   </Link>
-                  <Link href="/les-vins/domeni-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/domeni-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Domeni Rouge
                   </Link>
-                  <Link href="/les-vins/petrichor-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/petrichor-rouge" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Pétrichor Rouge
                   </Link>
                 </div>
@@ -599,10 +653,10 @@ export function Header() {
                   Spécialités
                 </h3>
                 <div className="space-y-3">
-                  <Link href="/les-vins/claire-de-lune" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/claire-de-lune" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Claire de Lune
                   </Link>
-                  <Link href="/les-vins/pigeonnier" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => setHoveredMenu(null)}>
+                  <Link href="/les-vins/pigeonnier" className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold" onClick={() => closeMenuImmediately()}>
                     Pigeonnier
                   </Link>
                 </div>
@@ -635,14 +689,14 @@ export function Header() {
                   <Link 
                     href="/savoir-faire/vigne" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Viticulture
                   </Link>
                   <Link 
                     href="/methode-blanche" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Méthode Ancestrale
                   </Link>
@@ -657,14 +711,14 @@ export function Header() {
                   <Link 
                     href="/savoir-faire/chais" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Vinification
                   </Link>
                   <Link 
                     href="/degustation" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Dégustation
                   </Link>
@@ -698,14 +752,14 @@ export function Header() {
                   <Link 
                     href="/reservation" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Réserver une visite
                   </Link>
                   <Link 
                     href="/degustation" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Dégustation
                   </Link>
@@ -720,14 +774,14 @@ export function Header() {
                   <Link 
                     href="/evenements" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Nos événements
                   </Link>
                   <Link 
                     href="/evenements/organiser" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Organiser un événement
                   </Link>
@@ -742,14 +796,14 @@ export function Header() {
                   <Link 
                     href="/club" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Club Lastours
                   </Link>
                   <Link 
                     href="/mecenat" 
                     className="block text-sm font-medium tracking-wide transition-colors text-slate-600 hover:text-slate-900 py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-wine-gold focus:text-wine-gold"
-                    onClick={() => setHoveredMenu(null)}
+                    onClick={() => closeMenuImmediately()}
                   >
                     Mécénat
                   </Link>

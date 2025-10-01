@@ -15,7 +15,7 @@ export default function ChaisPage() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url('/wine-cellar-with-barrels-and-bottles.png')`,
+            backgroundImage: `url('/PHOTOS-WEB-LASTOURS/VINIFICATION/chai barriques CP Gérard Négrier.jpg')`,
           }}
         />
         <div className="absolute inset-0 bg-black/50" />
@@ -46,7 +46,7 @@ export default function ChaisPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="aspect-[4/3] bg-muted rounded-lg overflow-hidden">
               <img
-                src="/wine-pressing-grapes-traditional-press.png"
+                src="/PHOTOS-WEB-LASTOURS/VINIFICATION/barriques et cuves.jpg"
                 alt="Pressurage des raisins"
                 className="w-full h-full object-cover"
               />
@@ -76,7 +76,7 @@ export default function ChaisPage() {
             <div className="lg:order-2">
               <div className="aspect-[4/3] bg-muted rounded-lg overflow-hidden">
                 <img
-                  src="/wine-fermentation-tanks-stainless-steel.png"
+                  src="/PHOTOS-WEB-LASTOURS/VINIFICATION/barriques et barboteurs.jpg"
                   alt="Fermentation alcoolique"
                   className="w-full h-full object-cover"
                 />
@@ -111,7 +111,7 @@ export default function ChaisPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="aspect-[4/3] bg-muted rounded-lg overflow-hidden">
               <img
-                src="/wine-malolactic-fermentation-process.png"
+                src="/PHOTOS-WEB-LASTOURS/VINIFICATION/barrique cuve béton.jpg"
                 alt="Fermentation malo-lactique"
                 className="w-full h-full object-cover"
               />
@@ -141,7 +141,7 @@ export default function ChaisPage() {
             <div className="lg:order-2">
               <div className="aspect-[4/3] bg-muted rounded-lg overflow-hidden">
                 <img
-                  src="/wine-pressing-separation-process.png"
+                  src="/PHOTOS-WEB-LASTOURS/VINIFICATION/barriques et rails.jpg"
                   alt="Écoulage et décuvage"
                   className="w-full h-full object-cover"
                 />
@@ -179,7 +179,7 @@ export default function ChaisPage() {
             <Card className="overflow-hidden">
               <div className="aspect-[4/3] bg-muted">
                 <img
-                  src="/wine-barrel-aging-french-oak.png"
+                  src="/PHOTOS-WEB-LASTOURS/VINIFICATION/futs de chene CP Gerard Negrier.jpg"
                   alt="Élevage en barrique"
                   className="w-full h-full object-cover"
                 />
@@ -201,7 +201,7 @@ export default function ChaisPage() {
 
             <Card className="overflow-hidden">
               <div className="aspect-[4/3] bg-muted">
-                <img src="/wine-blending-tasting-room.png" alt="Assemblage" className="w-full h-full object-cover" />
+                <img src="/PHOTOS-WEB-LASTOURS/VINIFICATION/verres barriques logo.jpg" alt="Assemblage" className="w-full h-full object-cover" />
               </div>
               <CardContent className="p-8">
                 <div className="flex items-center mb-4">
@@ -221,7 +221,7 @@ export default function ChaisPage() {
             <Card className="overflow-hidden">
               <div className="aspect-[4/3] bg-muted">
                 <img
-                  src="/wine-bottling-line-estate.png"
+                  src="/PHOTOS-WEB-LASTOURS/Photos-GENERAL/pour page d accueil louis bouteille.JPG"
                   alt="Mise en bouteille"
                   className="w-full h-full object-cover"
                 />
@@ -243,7 +243,7 @@ export default function ChaisPage() {
 
             <Card className="overflow-hidden">
               <div className="aspect-[4/3] bg-muted">
-                <img src="/wine-barrel-maintenance-cellar.png" alt="Ouillage" className="w-full h-full object-cover" />
+                <img src="/PHOTOS-WEB-LASTOURS/VINIFICATION/IMG_20230805_113440.jpg" alt="Ouillage" className="w-full h-full object-cover" />
               </div>
               <CardContent className="p-8">
                 <div className="flex items-center mb-4">

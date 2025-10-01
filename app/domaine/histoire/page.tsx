@@ -43,7 +43,7 @@ const histoireSections = [
       body: "Bien avant l'an mille, les moines bénédictins vinrent s'établir le long de la rivière Tarn. Avec patience et savoir, ils façonnèrent les premières grandes pages de l'histoire viticole du Sud-Ouest. Leurs cloîtres abritaient des secrets de fermentation, leurs mains bénissaient chaque vendange. C'est à eux que l'on doit la méthode ancestrale — première technique de vin effervescent au monde — précurseur oublié du champagne, née ici, à Gaillac."
     },
     image: {
-      src: "/photos/gégé neg allée platanes.jpg",
+      src: "/photos/gege-neg-allee-platanes.jpg",
       alt: "Allée de platanes historique du domaine",
       ratio: "16/9" as const
     },
@@ -71,7 +71,7 @@ const histoireSections = [
       body: "Notre domaine s'étend sur des terres cultivées dans le respect des équilibres naturels. Nous favorisons les pratiques douces : travail mécanique des sols, enherbement naturel, traitements alternatifs et limitation des intrants chimiques. Certifiés HVE (Haute Valeur Environnementale), nous mettons en avant notre volonté d'adopter une viticulture durable, garantissant la qualité de nos vins à travers des pratiques agricoles respectueuses de la biodiversité."
     },
     image: {
-      src: "/photos/gégé neg 6.jpg",
+      src: "/photos/gege-neg-6.jpg",
       alt: "Viticulture durable au Château Lastours",
       ratio: "16/9" as const
     },
